@@ -1,0 +1,2098 @@
+                                          FACTOR- AND COMPOSITE-BASED SEM                                                             1
+
+
+
+
+                                                    Factor- and Composite-Based Structural Equation Modeling - A New
+arXiv:2508.06112v2 [stat.ME] 1 Apr 2026
+
+
+
+
+                                               Approach to Incorporate Composites in the Traditional SEM Framework
+
+
+                                                    Tamara Schamberger1 , Florian Schuberth2 , Jörg Henseler2,3 , and Yves Rosseel4
+                                            1
+                                                Bielefeld University, Faculty of Business Administration and Management, Bielefeld,
+                                                                                    33615, Germany
+                                           2
+                                               University of Twente, Department of Design, Production and Management, Enschede,
+                                                                                7500 AE, The Netherlands
+                                                3
+                                                    Universidade Nova de Lisboa, Nova Information Management School, Campus de
+                                                                          Campolide, 1070-312 Lisboa, Portugal
+                                                        4
+                                                            Ghent University, Department of Data Analysis, 9000 Ghent, Belgium
+FACTOR- AND COMPOSITE-BASED SEM                                                            2
+
+
+                                       Author Note
+
+        Tamara Schamberger       https://orcid.org/0000-0002-7845-784X
+       Correspondence concerning this article should be addressed to Tamara
+Schamberger, Department Empirical Methods, Bielefeld University, Universitaetsstrasse 25,
+33615 Bielefeld, Germany; tamara.schamberger@uni-bielefeld.de
+       Yves Rosseel and Tamara Schamberger acknowledge that this work was supported
+by the FWO (Fonds voor Wetenschappelijk Onderzoek – Vlaanderen) under the project
+number G073026N.
+       Jörg Henseler acknowledges that this work was supported by national funds through
+FCT (Fundação para a Ciência e a Tecnologia), under the project - UID/04152/2025 -
+Centro de Investigação em Gestão de Informação (MagIC)/NOVA IMS -
+https://doi.org/10.54499/UID/04152/2025 <https://doi.org/10.54499/UID/04152/2025>
+(2025-01-01/2028-12-31) and UID/PRR/04152/2025
+https://doi.org/10.54499/UID/PRR/04152/2025
+<https://doi.org/10.54499/UID/PRR/04152/2025> (2025-01-01/ 2026-06-30).
+       During the preparation of this study, we used ChatGPT to improve the readability
+and language of the manuscript. After using this tool, the authors have reviewed and
+edited the content as needed and take full responsibility for the publication’s content.
+       A preprint of this manuscript is available on arXiv:
+https://doi.org/10.48550/arXiv.2508.06112.
+FACTOR- AND COMPOSITE-BASED SEM                                                             3
+
+
+                                          Abstract
+
+Structural equation modeling (SEM) is a prevalent approach for studying constructs.
+Traditionally, these constructs are modeled as reflectively measured latent variables –
+common factors that account for the variance-covariance structure of their associated
+indicators. Over the past two decades, there has been growing interest in an alternative
+way of modeling constructs: the composite, i.e., a linear combination of indicators.
+However, existing approaches to estimating composite models either limit researchers from
+fully leveraging SEM’s capabilities, such as handling missing data, evaluating overall model
+fit, and testing group differences, or significantly increase complexity of the model
+specification by introducing additional variables. Against this background, this paper
+presents a new way of integrating both common factors and composites in the traditional
+SEM framework. Our presented model specification, along with its model-implied
+variance-covariance matrix, enables researchers to: (i) utilize well-established SEM
+estimators, including maximum likelihood and generalized least squares estimators, and (ii)
+can leverage developments from the traditional SEM framework in terms of model
+specification, evaluation, and handling of missing data. This way of analyzing structural
+equation models involving common factors and composites is referred to as factor- and
+composite-based SEM (FC-SEM). This advancement aims to enhance the flexibility and
+applicability of SEM in analyzing constructs.
+       Keywords: Maximum Likelihood Estimation, Formative Constructs, Reflective
+Constructs, Missing Values, Structural Equation Modeling
+FACTOR- AND COMPOSITE-BASED SEM                                                                         4
+
+
+      Factor- and Composite-Based Structural Equation Modeling - A New
+    Approach to Incorporate Composites in the Traditional SEM Framework
+
+        Structural equation modeling (SEM) is a widely used statistical technique to study
+constructs and their relationships, i.e., relationships between constructs and their
+relationships with observed variables, so called indicators (Bollen, 1989). Its versatility has
+made SEM indispensable in various disciplines, including psychology (MacCallum &
+Austin, 2000), criminology (Higgins, 2002), and business research (Hult et al., 2006). By
+encompassing a variety of statistical techniques such as confirmatory factor analysis
+(Jöreskog, 1969), confirmatory composite analysis (Schuberth et al., 2018a), regression
+analysis (Graham, 2008), and latent growth curve analysis (McArdle, 1988), SEM provides
+a comprehensive framework for modeling and testing theories.
+
+        In research across various disciplines, accurately modeling constructs – whether
+constructs that are measured like mental health (e.g., Gerino et al., 2017) or constructs
+that are formed like socio-economic status (Chen et al., 2025) – is crucial (e.g., Bollen &
+Bauldry, 2011; Strauss & Smith, 2009). These constructs, often not directly observed, are
+inferred from a set of other variables. Traditionally, researchers model constructs as
+common factors in SEM, i.e., latent variables explaining the variance-covariance structure
+of their indicators (Jöreskog, 1969; Spearman, 1904). Consequently, common factors are
+assumed to be the underlying common cause of their indicators. An example is illustrated
+in Figure 1, where the common factor η underlies its measures y1 , . . . , yP . The variance in
+a measure yi that cannot be explained by the common factor is captured by the
+corresponding random measurement error εi (Bollen, 1989).1 This approach is particularly
+useful for modeling constructs that are measured such as intelligence, emotions, or
+attitudes (Henseler, 2021).
+
+        Several approaches to study structural equation models involving common factors
+
+1
+  Instead of speaking from random measurement errors, the literature sometimes refers to εi as unique
+factor (e.g., Jöreskog, 1969).
+FACTOR- AND COMPOSITE-BASED SEM                                                               5
+
+
+have been developed. Traditionally, estimators that minimize the discrepancy between the
+model-implied and the sample variance-covariance matrix of the observed variables are used
+to estimate the model parameters. Estimating and analyzing structural equation models
+involving common factors with such approaches is considered the standard across many
+disciplines. Therefore, we refer to this type of SEM as the traditional SEM framework in
+the following sections. These include approaches such as normal-theory-based generalized
+least squares (Browne, 1984; Jöreskog & Goldberger, 1972), weighted least squares
+(Browne, 1974) and the maximum likelihood (ML) estimators (Jöreskog, 1969, 1970). The
+latter is nowadays regarded as the gold standard for estimating structural equation models
+(Hoyle & Gottfredson, 2023). Additionally, alternative approaches have emerged to
+estimate structural equation models involving common factors. These approaches rely on
+composites, i.e., linear combinations of observed variables for this purpose. This includes
+methods such as sum score regression (Richardson, 1936) and partial least squares path
+modeling (PLS-PM, Wold, 1975). Initially touted for their smaller sample requirements
+and milder distribution assumptions, these approaches are known to yield biased parameter
+estimates when used for structural equation models involving common factors (e.g.,
+Rigdon, 2016; Schuberth, Hubona, et al., 2023; Schuberth et al., 2024).
+
+
+       However, not all constructs are assumed to be the underlying cause of their
+indicators (Rhemtulla et al., 2020); for example, constructs such as a company’s
+attractiveness are more plausibly formed by variables such as perceiving the company as
+successful in attracting high-quality employees, being able to imagine working there oneself
+and liking the company’s physical appearance (Hair et al., 2022). When such constructs
+are nevertheless modeled as common factors, this can result in poor construct validity,
+where the modeled construct fails to represent the actual construct of interest (Rhemtulla
+et al., 2020). This misalignment can lead to substantial parameter biases, particularly in
+relationships between constructs, and adversely affect model assessment (e.g., Schuberth
+et al., 2024). In such cases, researchers risk drawing wrong conclusions from their analyses.
+FACTOR- AND COMPOSITE-BASED SEM                                                               6
+
+
+For these reasons, some constructs are better represented as composites (Cho et al., 2022;
+Henseler, 2017; Hwang, Cho, Jung, et al., 2021; Schuberth, 2023) which assume that the
+construct is composed of its indicators (Henseler & Schuberth, 2020b; Yu et al., 2021).
+Modeling constructs as composites is particularly useful if the construct is formed by
+humans (Henseler, 2021) or if the construct is a collection of heterogeneous causes (Grace
+& Bollen, 2008). For example, extraversion in human development research has been
+modeled as a composite composed of warmth, gregariousness, assertiveness, activity,
+excitement seeking, and positive emotions (Edwards & Bagozzi, 2000); The firm
+performance index in information systems research has been modeled as a composite
+composed of customer relationships, operational excellence, and revenue growth (Rai et al.,
+2006); Soil conditions in ecology has been modeled as a composite composed of soil texture,
+soil moisture, and soil ph (Verheyen et al., 2003). As Figure 2 illustrates, composites do
+not impose restrictions on the variance-covariance structure of their indicators,
+fundamentally distinguishing them from common factors. Therefore, in line with Grace
+and Bollen (2008), we illustrate composites as hexagons instead of circles to distinguish
+them from latent variables. Moreover, applications of composites in SEM include item
+parcels (Little et al., 2002) and fixed-weights composites, i.e., linear combinations of
+observed variables with given weights, like sum scores (Schuberth et al., 2025).
+
+
+       As awareness of the different types of constructs has increased, so has the need for
+approaches to deal with structural equation models involving both composites and common
+factors. Estimators that build composites for parameter estimation, such as PLS-PM,
+generalized structured component analysis (GSCA, Hwang & Takane, 2004), and a
+maximum likelihood (ML) estimator for composite models (Chapter 6, Schamberger, 2022)
+are naturally candidates for this purpose. However, these approaches are limited to
+studying structural equation models involving composites. To overcome these limitations,
+consistent partial least squares (PLSc, Dijkstra & Henseler, 2015a), integrated generalized
+structured component analysis (IGSCA, Hwang et al., 2020), singular value decomposition
+FACTOR- AND COMPOSITE-BASED SEM                                                             7
+
+
+SEM (SVD-SEM, Tenenhaus et al., 2025), and a restricted ML estimator (RML-SEM,
+Tenenhaus et al., 2025) can be used to consistently estimate structural equation models
+involving common factors and composites. However, these approaches do not leverage the
+full capabilities of approaches developed in the traditional SEM framework, such as model
+assessment and handling missing data, or can only be used to estimate standardized path
+coefficients. Attempts have been made to deal with this issue by incorporating composites
+in the traditional SEM framework. These include the two-step approach, the one-step
+approach (Grace & Bollen, 2008), the pseudo-indicator approach (Rose et al., 2019), and
+the H-O specification (Henseler, 2021; Schuberth, 2023). Yet, these approaches are limited,
+as they either do not allow composites to be in dependent positions in the structural model
+(as for the one-step approach), do not allow the composite weights to be freely estimated
+(as for the pseudo-indicator and the two-step approach), or they increase the complexity of
+specifying the model (as for the H-O specification). To conclude, current approaches to
+modeling composites and common factors face limitations in terms of model specification,
+model complexity, model assessment, and the applicability of advanced analytical
+procedures established in the traditional SEM framework.
+
+
+       To overcome these limitations, we introduce a new way of incorporating composites
+and common factors jointly in the traditional SEM framework, called factor- and
+composite-based SEM (FC-SEM). Specifically, we present the model specification and
+derive the implications of the model on the model-implied variances and covariances of the
+variables in such a way that (i) estimators developed in the traditional SEM framework can
+be directly applied, (ii) we can deal with models containing both composites and common
+factors, and (iii) we allow for different scaling methods for both composites and common
+factors. As a result, we can directly rely on enhancements such as model assessment
+criteria, and approaches to dealing with missing values developed in the traditional SEM
+framework. Therefore, our presented approach overcomes the limitations of other
+approaches to estimate structural equation models involving common factors and
+FACTOR- AND COMPOSITE-BASED SEM                                                               8
+
+
+composites by allowing for parameter constraints, flexibly modeling composites, and an
+intuitive model specification.
+
+       The remainder of this paper is structured as follows. We begin by reviewing the
+current state of integrating composites and common factors in structural equation models.
+We then introduce our approach by explaining the specification, the implications on the
+variables’ model-implied variances and covariances, the identification, the estimation, and
+the assessment of these models. Further, our approach is implemented in the open-source
+R package lavaan (Rosseel, 2012; Rosseel et al., 2025). We discuss this implementation
+followed by a scenario analysis that illustrates how to specify the model and demonstrates
+that our approach is able to retrieve the population parameters in the case of a sample that
+perfectly represents the population. Moreover, we evaluate the finite sample performance
+of our approach. Next, we illustrate our approach by an empirical example that shows that
+the results of our approach are similar to those of other approaches to study structural
+equation models with common factors and composites. Finally, we conclude with a
+discussion on the advantages and limitations of our approach.
+
+Extant Approaches to Study Common Factors and Composites in a Structural
+                                     Equation Model
+
+       Traditionally, SEM deals with constructs modeled as common factors. This type of
+SEM has a long tradition and remains the default in many disciplines. Its origins lie in the
+introduction of factor analysis (Spearman, 1904) and path analysis (Wright, 1934). Its
+popularity increased due to the work of Karl G. Jöreskog (1969, 1970) and the introduction
+of the software LISREL (Jöreskog & Sörbom, 1993). Detailed overviews of SEM’s history
+can be found in Tarka (2017) and Bollen et al. (2022). In contrast, the groundwork to
+studying constructs as linear combinations of observed variables, i.e., as composites, was
+laid in the 1980s (e.g., Fornell & Bookstein, 1982; Wold, 1982). Initially, composites were
+primarily seen as a means for dimension reduction, and researchers did not ascribe any
+conceptual unity to the components of a composite (Bollen & Bauldry, 2011). This
+FACTOR- AND COMPOSITE-BASED SEM                                                             9
+
+
+perspective shifted with the advent of theoretical frameworks that provided a rationale for
+modeling constructs using composites (Diamantopoulos & Winklhofer, 2001; Fornell &
+Bookstein, 1982; Henseler, 2017; Henseler & Schuberth, 2020a; Rigdon, 2012; Sarstedt
+et al., 2016), alongside the formal establishment of the composite model (Dijkstra, 2013,
+2017).
+
+         Due to the growing awareness of different ways of modeling constructs, several
+approaches to deal with structural equation models containing both common factors and
+composites have been presented. These can be divided into (i) approaches developed
+outside the traditional SEM framework and (ii) model specifications aimed at
+incorporating composites into the traditional SEM framework. The following two
+subsections discuss these approaches, including their advantages and disadvantages.
+
+Approaches to Analyse Structural Equation Models Involving Common Factors
+and Composites Developed Outside the Traditional SEM Framework
+
+         The first approach for handling common factors and composites in structural
+equation models involves using estimators specifically designed for this purpose. This
+category includes methods such as PLSc, GSCA, SVD-SEM, and RML-SEM.
+
+         PLS-PM is arguably the most widely employed estimator for composite models. It
+is a two-step procedure (Lohmöller, 1989; Wold, 1975). In the first step, weights are
+estimated using the iterative partial least squares algorithm, and are then used to
+construct composites. In the second step, relationships between the composites are
+estimated. However, when PLS-PM is applied to models containing common factors, it
+leads to inconsistent parameter estimates (Dijkstra, 1983; Hui & Wold, 1982). To address
+this issue, PLSc was introduced (Dijkstra & Henseler, 2015a, 2015b). PLSc corrects for
+attenuation bias when common factors are present, offering consistent parameter estimates
+for models that include both composites and common factors (Schuberth et al., 2018b).
+Despite this advantage, PLS-PM and PLSc are limited in several regards. There is little
+flexibility in specifying models (Schuberth, Zaza, & Henseler, 2023). Specifically, only some
+FACTOR- AND COMPOSITE-BASED SEM                                                               10
+
+
+error correlations can be freed (Rademaker et al., 2019) and PLS-PM and PLSc do not
+allow researchers to impose constraints on model parameters (Schuberth, Zaza, & Henseler,
+2023). Finally, no closed-form expression for the standard errors have been derived and
+thus statistical inference for PLS-PM and PLSc relies on bootstrap which increases
+computational time.
+
+       As an alternative to PLS-PM, GSCA has been proposed (Hwang & Takane, 2004,
+2014). GSCA originally estimates models with composites by minimizing the sum of
+squared residuals using an alternating least squares algorithm. Similar to PLS-PM, GSCA
+produces inconsistent parameter estimates for models involving common factors (Henseler,
+2012). To address this issue, GSCA with uniqueness terms for accommodating
+measurement error was introduced (Hwang et al., 2017). In addition, for models containing
+both common factors and composites, Integrated GSCA (Hwang, Cho, Jung, et al., 2021)
+can be used to obtain consistent parameter estimates. While these approaches offer
+flexibility in model specification, they remain limited in terms of model assessment due to
+their reliance on bootstrap for inference and the limited availability of overall model fit
+assessment criteria.
+
+       Moreover, SVD-SEM has been proposed as an alternative to PLS-PM (Tenenhaus
+et al., 2025). This is a non-iterative approach, that aligns with the framework proposed by
+Dhaene and Rosseel (2023) on non-iterative estimators in the structural after measurement
+(SAM, Rosseel & Loh, 2024) approach to SEM. Starting from a correlation matrix,
+SVD-SEM yields parameters that are consistent and asymptotically normal through a
+series of singular value decompositions. This approach produces standardized parameter
+estimates only.
+
+       Finally, RML-SEM has been introduced (Tenenhaus et al., 2025). This approach
+estimates model parameters by minimizing the fit function for structural equation models
+involving common factors (Jöreskog, 1969), under the constraint that all composites and
+common factors have a unit variance. However, this approach comes with several
+FACTOR- AND COMPOSITE-BASED SEM                                                             11
+
+
+disadvantages. First, only standardized estimates can be obtained for the structural
+parameters. Second, this approach relies on constrained maximum likelihood estimation,
+which inherently increases computational time. Finally, it is not implemented in any
+readily available software.
+
+       Despite these advancements, these approaches were developed outside the
+traditional SEM framework. Consequently, developments in the traditional SEM
+framework cannot be directly applied, such as conducting comprehensive model
+assessments, handling missing data, and model comparisons.
+
+Model Specifications to Accommodate Common Factors and Composites in the
+Traditional SEM Framework
+
+       Next to approaches that emerged outside the traditional SEM framework,
+approaches have been developed that allow for integrating composites into the traditional
+SEM framework. Consequently, these approaches can deal with models that include both
+composites and common factors.
+
+       In the classical one-step approach (Grace & Bollen, 2008), a composite is modeled
+as a formatively measured latent variable whose error term variance is fixed to zero.
+Consequently, the latent variable is entirely composed of its indicators, i.e., it is a
+composite. This specification restricts composites to independent positions in the
+structural model and prohibits the estimation of covariances between the composite and
+other variables (Schuberth, 2023). This limitation can be partly addressed by modeling the
+effects of other variables on the composite via its indicators (Schamberger et al.,
+forthcoming). Yet, this significantly increases the number of model parameters and
+therefore reduces the degrees of freedom.
+
+       Another approach to study composites in SEM is the pseudo-indicator approach
+(Rose et al., 2019). This approach exploits the idea that instead of modeling a composite
+as a weighted linear combination of its indicators, one indicator can be expressed as the
+difference between the composite and other indicators. However, this method currently
+FACTOR- AND COMPOSITE-BASED SEM                                                               12
+
+
+lacks a mechanism for freely estimating composite weights.
+
+       The Henseler–Ogasawara (H–O) specification (Henseler, 2021; Schuberth, 2023; Yu
+et al., 2023) overcomes the limitations of the pseudo-indicator and the one-step approach..
+This specification extracts as many composites as there are indicators and expresses the
+relationships between composites and indicators using composite loadings. Although
+promising, the H–O specification has several limitations. First, it increases specification
+complexity by introducing additional variables. Second, it specifies composites in terms of
+composite loadings, which contradicts the definition of these constructs. Consequently, the
+actual model parameters of interest, i.e., the composite weights, variances, and covariances
+between the corresponding indicators, must be derived from the estimated model
+parameters after estimation. As a result, restricting composite weights is not
+straightforward (Henseler, Yu, et al., 2025) and even more challenging for composite
+indicators’ variances and covariances. Third, applying this specification in traditional SEM
+software requires the use of several tricks, such as fixing measurement error variances to
+zero and finding appropriate starting values. Together, these points often lead to
+convergence issues, and increased computational time.
+
+       In conclusion, current approaches for handling composites and common factors in
+structural equation models face limitations regarding model specification, identification,
+and assessment. To fully leverage the capabilities of traditional SEM, we need to address
+these limitations.
+
+
+     Structural Equation Modeling with Common Factors and Composites
+
+
+       This section introduces FC-SEM, a new approach to incorporate common factors
+and composites in the traditional SEM framework. Specifically, we present how to specify
+the model and we derive the model-implied variance-covariance matrix. We further
+demonstrate how to ensure model identification. Finally, we demonstrate how to estimate
+and assess the models with approaches developed in the traditional SEM framework.
+FACTOR- AND COMPOSITE-BASED SEM                                                                13
+
+
+Model Specification
+
+       SEM centers on the structural equation model, a statistical model that represents
+relationships among variables using linear structural equations. In empirical studies, it is
+usually a formalized representation of researchers’ conceptual understanding of the real
+world. We will demonstrate how to specify structural equation models that incorporate
+both composites and common factors. For simplicity, we assume that each variable has a
+mean of zero. Any structural equation model can be divided into two components: (i) the
+models that contain relations between constructs and their indicators, and (ii) the model
+that relates the constructs, i.e., the structural model. We will introduce both models in the
+following.
+
+       In the case of common factors and composites, we have two models that relate the
+constructs with their indicators as shown in the following equations:
+
+
+                                       y f = Λf η f + εf                                      (1)
+
+                                        ηc = W ′yc                                            (2)
+
+
+where y f is a (P f × 1) random vector of the indicators related to the common factors,
+which are comprised in the (M f × 1) random vector η f . Consequently, y f is referred to as
+common factor indicators. Further, the (P f × 1) random vector εf comprises the random
+measurement errors of the common factor indicators, which are assumed to be uncorrelated
+with η f and η c . Similarly, y c is a (P c × 1) random vector of the indicators related to the
+composites, which are comprised in the (M c × 1) random vector η c . Thus, this type of
+indicators is referred to as composite indicators. The (P f × M f ) matrix Λf contains the
+effects of the common factors on their indicators, commonly referred to as factor loadings
+and the (P c × M c ) matrix W contains the contributions of the composite indicators to the
+composites, i.e., the composite weights.
+
+       While the variances and covariances among common factor indicators are explained
+FACTOR- AND COMPOSITE-BASED SEM                                                                        14
+
+
+by the common factor and the random measurement errors, the variances of the composite
+indicators are unrestricted, as are the covariances between indicators that form a specific
+composite. These unrestricted variances and covariances are captured in the (P c × P c )
+matrix T which is defined as follows:
+               
+               cov(yic , yjc )      if the two indicators yic and yjc form the same composite
+               
+               
+               
+       Tij =                                                                                           (3)
+               
+               0                    otherwise.
+               
+               
+
+
+
+         Next to the relations between the constructs and their indicators, constructs are
+allowed to be related with each other. These relations are expressed in the structural
+model:
+
+
+                                  η = Bη + ζ      ⇔        η = (I − B)−1 ζ,                            (4)
+
+
+where the (M × 1) vector η captures the common factors and composites, the (M × M )
+matrix B contains the relations between the constructs, and the (M × 1) random vector ζ
+contains the structural error terms2 which are assumed to be uncorrelated with εf .
+Moreover, relations between constructs and observed variables which do not serve as
+indicators for a common factor or a composite, i.e. covariates, can be modeled. To do so,
+these observed variables, which are comprised in the random vector x, can be modeled as
+single-indicator common factors where the indicators have no measurement error and the
+factor loadings are set to 1. Consequently, they are just special cases of the common factor
+model and can also be subsumed in y f .
+
+Model Implications - The Model-Implied Variance-Covariance Matrix
+
+         A core principle of traditional SEM is that indicator variances and covariances are
+modeled in terms of the model parameters. This can be done by using implications of the
+
+2
+  If the construct ηi is not explained by other variables in the structural model, the corresponding
+structural error term ζi is equal to the construct ηi . We further assume that I − B has full rank.
+FACTOR- AND COMPOSITE-BASED SEM                                                             15
+
+
+model specification on the variables’ variances and covariances. Consequently, we derive
+the model-implied variance-covariance matrix of the indicators.
+
+       For common factor indicators as depicted in Equation (1), the model-implied
+variance-covariance matrix is well established (e.g., Bollen, 1989):
+
+
+                                                             ′
+                            V (y f ) = Σ(θ)f = Λf V(η f )Λl + Θf ,                          (5)
+
+
+where Θf represents the variance-covariance matrix of the measurement errors εf and
+V(η f ) represents the variance-covariance matrix of the common factors.
+
+       In the composite model, the variances and covariances of composite indicators
+forming a specific composite are free model parameters and are comprised in the matrix T .
+In contrast, the composites’ variances are determined within the model and given by the
+diagonal elements of W ′ T W . To obtain the covariances between common factor indicators
+and composite indicators and the covariances between composite indicators which form
+different composites, we derive so called composite loadings, i.e., coefficients from an
+ordinary least squares regression of the composites on their directly related indicators:
+
+
+                                   y c = Λc η c                                             (6)
+
+                                   Λc = T W (W ′ T W )−1 ,                                  (7)
+
+
+where T W captures the covariances between the composites and their related indicators
+and the matrix W ′ T W is a diagonal matrix containing the composite variances. We show
+the derivation of Equation (7) in the Appendix. Consequently, the model-implied
+variance-covariance matrix for a model solely containing composites can be derived as:
+
+
+                                                   ′                   ′
+                    V (y c ) = Σ(θ)c = Λc V(η c )Λc − Λc W ′ T W Λc + T                     (8)
+                                                   ′
+                                     = Λc V(η c )Λc + Θc .                                  (9)
+FACTOR- AND COMPOSITE-BASED SEM                                                                   16
+
+
+Where the matrix Θc is included to take into account that the variances of the composite
+indicators and covariances between composite indicators forming one specific composite are
+unrestricted and given by T . Note that in contrast to the common factor model, the
+matrix Θc is not a variance-covariance matrix.
+
+
+       Further, using the relations of the structural model, see Equation (4), the
+variance-covariance matrix of η is derived in the following equation:
+
+
+                              V(η) = (I − B)−1 V(ζ)(I − B)′−1 .                                  (10)
+
+
+As the composites are dependent variables in the composite model, it needs to be taken
+into account that the variances of the composites are also determined via their relations
+with the indicators. To combine the restrictions of the composite model and the structural
+model, the variances of the composites given by the last M c diagonal elements in Equation
+(10) must be set equal to the diagonal elements of W ′ T W . Consequently, the variances of
+the structural error terms related to composites are not free parameters, but functions of
+the remaining model parameters.
+
+
+       If we combine the constraints of all parts of the model, we can derive the
+model-implied variance-covariance matrix of the indicators. To do so, we make use of the
+following equation:
+                                                                       
+                                   f           f              f           f
+                              y  Λ              0  η          ε 
+                               =                             +                           (11)
+                                                               
+                                  yc           0   Λc        ηc           0
+
+
+By combining y f and y c into a single vector, i.e. y = (y f , y c )′ , we can write this more
+compactly as:
+
+
+                                               y = Λη + ε                                        (12)
+FACTOR- AND COMPOSITE-BASED SEM                                                                       17
+
+
+Subsequently, the model-implied variance-covariance matrix of the indicators is given by:
+
+
+                                          Σ(θ) = ΛV(η)Λ′ + Θ,                                       (13)
+
+                                            
+                                      f
+                                 Θ        0
+where we define Θ as:3 Θ =                   with Θc = T − Λc W ′ T W Λc′ . Note that the
+                                            
+                               0 Θc
+model-implied variance-covariance matrix strongly resembles the one known from the
+traditional SEM framework.
+
+Model Identification
+
+        In this section, we present the necessary conditions for identifying a structural
+equation model with both composites and common factors. Ensuring that the model
+parameters are identified is crucial because otherwise the results cannot be interpreted
+reliably, as re-estimating the same model with identical data can produce entirely different
+results (Bollen, 1989).
+        The first necessary condition for identification is adhering to the t rule, which
+requires that the degrees of freedom are greater than or equal to zero (Bollen & Davis,
+2009). The degrees of freedom are defined as the difference between the number of the
+non-redundant variances and covariances of the indicators and the number of the model
+parameters K:
+
+
+                                      df = (P · (P + 1))/2 − K                                      (14)
+
+
+For a model with both composites and common factors, the model parameters are given by:
+
+    • The non-redundant elements in Θf , i.e., the free (co)variances of the measurement
+      errors
+
+    • The non-redundant elements in T , i.e., the free (co)variances of the composite
+
+3
+  Note that covariances between composite indicators and measurement errors could in principle be defined
+via the off-diagonal blocks.
+FACTOR- AND COMPOSITE-BASED SEM                                                              18
+
+
+      indicators
+
+  • The free factor loadings in Λf
+
+  • The free composite weights in W
+
+  • The free directed relations between constructs in B
+
+  • The free variances of the structural error terms, i.e., the respective M f main diagonal
+      elements in V (ζ)
+
+  • The free covariances of the structural error terms, i.e., the off-diagonal elements in
+      V (ζ)
+
+       Ensuring model identification further requires that all sub-models – common factor
+model, composite model, and structural model – are identified. For the structural model,
+traditional SEM rules apply. We refer to Bollen and Davis (2009) and O’Brien (1994) for
+further discussion.
+
+       Similarly, we can rely on the rules known from the traditional SEM framework for
+identification of the common factor model. Scaling each common factor is crucial. For this
+purpose, several scaling methods have been proposed (e.g., Klopp & Klößner, 2021), e.g.,
+fixing one loading per common factor, or fixing the variances of the common factors.
+Additional identification rules are discussed in Bollen (1989).
+
+       For the composite model, scaling of the composites is necessary. Our model permits
+alternative scaling methods. Specifically, composites can be scaled by fixing one weight,
+fixing the variances of composites, or imposing other restrictions on the weights, such as
+constraining their sum. Additionally, a composite needs to be related to at least one other
+variable not forming the composite (Dijkstra, 2017). This is because the variances and
+covariances of observed variables making up a composite are free parameters, and thus, an
+isolated composite would have a negative number of degrees of freedom unless all weights
+are pre-specified.
+FACTOR- AND COMPOSITE-BASED SEM                                                              19
+
+
+       To conclude, identifying a structural equation model that includes both composites
+and common factors involves applying traditional SEM rules for common factor and
+structural models and ensuring that the composite model is identified through proper
+scaling and relating the composites to other variables (or fixing all composite weights).
+
+Model Estimation
+
+       Once a structural equation model is specified and all parameters are identified, we
+can proceed to estimate the model parameters. Our proposed model specification, along
+with its model-implied variance-covariance matrix, enables us to directly apply established
+methods from the traditional SEM framework for this purpose. Consequently, estimation
+of structural equation models involving composites and common factors is conducted in the
+same manner as the estimation of structural equation models with common factors only.
+
+       In the traditional SEM framework, the model parameters are estimated by
+minimizing the discrepancy between the model-implied (see Equation 13) and the sample
+variance-covariance matrix of the indicators. For this purpose, various optimization
+criteria, such as weighted least squares (WLS, Browne, 1984), generalized least squares
+(GLS, Jöreskog & Goldberger, 1972), two-stage least squares (2SLS, Bollen, 1996), and ML
+(Jöreskog, 1969, 1970) can be used. ML is the most widely used approach, likely due to its
+capabilities, such as handling missing values, and the fact that it is the default method in
+most SEM software packages. Therefore, we show in the following how to obtain ML
+parameter estimates for our presented model specification. For this purpose, we
+additionally assume that the observed variables are normally distributed, i.e.,
+y ∼ N (0, Σ(θ)). The ML estimates are obtained by maximizing the log likelihood function
+(Lawley & Maxwell, 1963):
+
+                         1 h                        i  N ·P
+                log L = − n log|Σ(θ)| + tr(SΣ(θ)−1 ) −      · log(2 · π)                    (15)
+                         2                              2
+
+Maximizing the log likelihood function is equivalent to minimizing the following
+FACTOR- AND COMPOSITE-BASED SEM                                                           20
+
+
+discrepancy function:
+
+
+                         F = log|Σ(θ)| + tr(SΣ(θ)−1 ) − log|S| − P,                      (16)
+
+
+where the constants log|S| and P are included to obtain a value of 0 for F if Σ(θ̂) equals
+S. The results for the remaining estimators can be obtained by optimizing their respective
+criterion.
+
+Model Assessment
+
+       Employing traditional SEM estimators, including ML, WLS, and GLS, not only
+provides consistent, asymptotically unbiased and efficient estimates (Davidson &
+MacKinnon, 1993), but also provides various model assessment options. Specifically, all
+analytic robust and non-robust standard errors and test statistics developed in the
+traditional SEM framework (Savalei & Rosseel, 2021) can be used for assessing individual
+parameter estimates.
+
+       In addition to assessing individual parameter estimates, our approach allows us to
+use traditional SEM methods to assess the overall model fit and determine whether the
+model is consistent with the collected data. For example, the χ2 test (Jöreskog, 1969;
+Wilks, 1938) can be used to test the following null hypothesis:
+
+
+                                       H0 : Σ(θ) = Σ                                     (17)
+
+
+where Σ is the population variance-covariance matrix of the observed variables y. The test
+statistic is obtained as follows (Jöreskog, 1969; Wilks, 1938):
+
+
+                                        χ2 = n · F (θ̂),                                 (18)
+
+
+where F is the fit function and the sample size is denoted by n. This test statistic is under
+the null hypothesis of perfect fit asymptotically χ2 distributed with df degrees of freedom
+FACTOR- AND COMPOSITE-BASED SEM                                                                        21
+
+
+as given in Equation (14).
+
+        The χ2 test can be used to test exact fit. To evaluate close fit instead, researchers
+can use fit indices such as the standardized root mean squared residual (SRMR, Jöreskog
+& Sörbom, 1988) or the root mean square error of approximation (RMSEA, Browne &
+Cudeck, 1992). For a detailed overview of these fit indices and their interpretation, we refer
+to Hu and Bentler (1999) and Schermelleh-Engel et al. (2003).
+
+                                    Implementation in lavaan
+
+        In this section, we explain the implementation of FC-SEM in the open-source
+software R (R Core Team, 2020) package lavaan (version 0.6-20 Rosseel, 2012; Rosseel
+et al., 2025). This package is very popular in the field of SEM and is frequently used in
+practice (Jorgensen, 2017). Generally, the analysis of structural equation models involving
+composites and common factors follows a procedure similar to the analysis of models
+involving only common factors. Specifically, the same functions are applicable, and there is
+no need to modify the model syntax for the structural and common factor models. In the
+following, we briefly outline the necessary adaptations for integrating composites.
+
+        To incorporate composites in the lavaan syntax, the operator ‘<∼’ is used, with the
+composite specified on the left side and the composite indicators connected via ‘+’
+operators.4 By default, composites are scaled, setting the weight of the first indicator per
+composite to one. This is similar to the default scaling method for common factors.
+
+        The sem() function can be used to obtain the parameter estimates. To obtain the
+standardized parameter estimates, the standardized argument can be set to ‘TRUE’ in
+the summary() function. Standardized parameter estimates are particularly useful for
+comparisons with PLSc results, as PLSc estimates are usually standardized. By default,
+the composite indicator (co)variances are fixed to their sample statistics.
+
+        The current implementation (lavaan 0.6-20) has some limitations. Firstly, while
+
+4
+  Note that in earlier package versions, the <∼ operator was used to specify a formatively measured latent
+variable whose error term variance is fixed to zero.
+FACTOR- AND COMPOSITE-BASED SEM                                                              22
+
+
+standardized parameter estimates can be obtained, scaling constructs to have unit variance
+during the estimation procedure is not yet supported when composites are involved.
+Secondly, due to the absence of an analytical gradient, the option optim.gradient must
+be set to "numerical" during optimization. Lastly, the current implementation does not
+yet support mean structures. Nevertheless, these limitations are expected to be addressed
+in future updates.
+
+                 Scenario Analysis And Finite Sample Performance
+
+       In this section, we demonstrate our approach to SEM with common factors and
+composites through a scenario analysis. Specifically, we illustrate how to specify the model,
+how to derive the model-implied variance-covariance matrix, how to identify the model
+parameters, and how to calculate the degrees of freedom. Moreover, we demonstrate that
+our approach can retrieve the population parameters when the data perfectly represents
+the population. In this case, evaluating the overall model fit is not informative, as it would
+inevitably indicate a perfect fit. Finally, we evaluate the finite sample behavior of our
+approach.5
+
+       We consider a population model with four constructs η1 , η2 , η3 , and η4 . The
+constructs η1 and η2 are modeled as common factors, while the constructs η3 and η4 are
+modeled as composites. With this population model, our approach can be illustrated in the
+most general, but also most simple case. The population model is illustrated in Figure 3.
+
+       The two common factors η1 and η2 are measured by three observed variables:
+
+
+                y1 = 1 · η 1 + ε 1 ;   y2 = 0.8 · η1 + ε2 ;   y3 = 0.9 · η1 + ε3            (19)
+
+                y4 = 1 · η 2 + ε 4 ;   y5 = 0.7 · η2 + ε5 ;   y6 = 0.8 · η2 + ε6 .          (20)
+
+
+The measurement errors are assumed to be uncorrelated with a variance of 0.5 each.
+
+5
+  The R code is available via the following link:
+https://osf.io/9tm2y/?view_only=59d9792bab994892a735e4efc763b511
+FACTOR- AND COMPOSITE-BASED SEM                                                                        23
+
+
+Additionally, the random measurement errors are assumed to be uncorrelated with the
+common factors and the composites. The composites η3 and η4 are related to their
+indicators as follows:
+
+
+                              η3 = 1 · y7 + 0.4 · y8 + 0.6 · y9                                       (21)
+
+                              η4 = 1 · y10 + 0.2 · y11 + 0.5 · y12 + 0.3 · y13 .                      (22)
+
+
+The variance-covariance matrices of the indicators forming a composite are given by:
+                                                                                               
+                                                                             7.0   0.9 0.5 1.2
+                                      
+                       6.0   2.0 1.2                                                          
+                                                                             0.9   3.0 0.7   1.8
+                                                                                                
+                                      
+   V (y7 , y8 , y9 ) = 
+                       2.0   5.0      ;
+                                    1.5        V (y10 , y11 , y12 , y13 ) =                         (23)
+                                                                                              
+                                                                                                 .
+                                                                             0.5   0.7 2.0   0.5
+                                                                                                
+                                      
+                       1.2 1.5 2.0
+                                                                                              
+                                                                                                
+                                                                               1.2 1.8 0.5 5.0
+                                                                                                
+
+
+
+The structural model is specified as:
+
+
+                                 η4 = 0.6 · η1 + 0.5 · η3 + ζ4                                        (24)
+
+                                 η2 = 0.2 · η1 + 0.1 · η3 + 0.3 · η4 + ζ2 .                           (25)
+
+
+Here, ζ2 and ζ4 are uncorrelated, uncorrelated with η1 , and η3 , and ζ2 has a variance of 1.5.
+The variance of η1 is set to 2.0, and the covariance between η1 and η3 is 0.1. The
+population variance-covariance matrix and its derivation is provided in the Appendix.
+
+
+
+
+       To evaluate the performance of our approach in the case where the sample perfectly
+represents the population, we draw a sample of 200 observations that exactly represents
+this population, i.e., the sample variance-covariance matrix of the observed variables equals
+the population counterpart, from the multivariate normal distribution using the R package
+FACTOR- AND COMPOSITE-BASED SEM                                                                                 24
+
+
+lavaan. Subsequently, we specify the common factor model as:
+                                                                            
+                               y1  λ1                  0        ε1 
+                                                                 
+                                                         0
+                                                                 
+                               y   λ                            ε 
+                                2   2                             2
+                                                            
+                                                         0
+                                                                 
+                               y   λ
+                                                             η1  ε3 
+                                                                     
+                                3   3
+                                =                          +  .
+                                     0
+                                                            
+                               y                       λ4 
+                                                             η2
+                                                                    ε 
+                                4                                 4
+                                                                 
+                                     0
+                                                                 
+                               y                       λ5 
+                                                                   ε 
+                                5                                 5
+                                                                 
+                                                    0
+                                                                 
+                                   y6                    λ6                 ε6
+
+
+The composite model is specified as:
+                                                                                            
+                                                                                   y7 
+                                                                                  
+                   η3  w7            w8 w9             0         0   0     0 
+                                                                                  ...  .
+                                                                                        
+                    =
+                                                                                   
+
+                                   0        0       0
+                                                                              
+                    η4                                   w10 w11 w12         w13  
+                                                                                        
+                                                                                   y13
+
+
+The matrix T is given by:
+                                                                                                               
+    var(y7 )                                                                                                   
+                                                                                                               
+   cov(y , y )     var(y8 )
+                                                                                                               
+                                                                                                                
+        7 8                                                                                                    
+                                                                                                               
+   cov(y , y )   cov(y8 , y9 ) var(y9 )
+                                                                                                               
+                                                                                                                
+        7 9                                                                                                    
+                                                                                                               
+T =    0                0              0               var(y10 )
+                                                                                                               
+                                                                                                                .
+                                                                                                               
+                                                                                                               
+        0                0              0           cov(y10 , y11 )     var(y11 )
+                                                                                                               
+                                                                                                               
+                                                                                                               
+                                                                                                               
+        0                0              0           cov(y10 , y12 ) cov(y11 , y12 )          var(y12 )
+                                                                                                               
+                                                                                                               
+                                                                                                               
+                                                                                                               
+           0             0              0           cov(y10 , y13 ) cov(y11 , y13 ) cov(y12 , y13 ) var(y13 )
+                                                                                                               
+
+
+                                                                                                           (26)
+
+
+Moreover, the matrix Θf contains the variances θii of measurement errors εi on the
+FACTOR- AND COMPOSITE-BASED SEM                                                                         25
+
+
+diagonal. The variances of the composites are calculated as:
+                                                                                  
+                          var(y7 )                                         w7 
+                                                                         
+var(η3 ) = w7 w8         cov(y7 , y8 )           var(y8 )                                             (27)
+                                                                           
+                      w9                                                   w 
+                                                                             8
+                                                                           
+                                cov(y7 , y9 ) cov(y8 , y9 ) var(y9 )
+                                                                           
+                                                                                w9
+                                                                                                         
+                                       var(y10 )                                                  w10 
+                                                                                                      
+                                     cov(y , y )             var(y11 )
+                                                                                                      
+                                                                                                  w 
+                                            10 11                                                   11 
+var(η4 ) = w10 w11 w12
+                                      
+                                 w13                                                                  .
+                                      cov(y , y )           cov(y11 , y12 )         var(y12 )
+                                                                                                      
+                                                                                                   w 
+                                           10 12                                                   12 
+                                                                                                      
+                                          cov(y10 , y13 ) cov(y11 , y13 ) cov(y12 , y13 ) var(y13 )
+                                                                                                      
+                                                                                                      w13
+
+                                                                                                       (28)
+
+
+The structural model is expressed as:
+                                                                              
+                             η1  0             0 0    0  η1   η1 
+                                                            
+                                                  0 b4
+                                                            
+                             η   b                    b5 
+                                                             η2   ζ2 
+                                                                 
+                              2   3
+                              =                            +  .                                (29)
+                                   0             0 0    0
+                                                            
+                             η 
+                                                             η3  η3 
+                                                                 
+                              3  
+                                                            
+                                              b1 0 b 2   0
+                                                            
+                                 η4                               η4            ζ4
+
+
+The variance of η1 is denoted as ψ11 , the variance of ζ2 is ψ22 , the variance of η3 is given by
+Equation (27), the covariance between η1 and η3 is denoted as ψ13 , and the variance of ζ4 is
+calculated as:
+
+
+              var(ζ4 ) = ψ44 = var(η4 ) − b21 var(η1 ) − b22 var(η3 ) − 2b1 b2 cov(η1 , η3 ).          (30)
+
+
+The model-implied variance-covariance matrix of the indicators can be derived using the
+Equations (10) and (13).
+
+       To ensure model identification, we scale the common factors and composites by
+setting λ1 , λ4 , w7 , and w10 to 1. The common factor model is identified as each common
+factor is scaled and fulfills the two-indicator rule, i.e., each common factor is related to at
+FACTOR- AND COMPOSITE-BASED SEM                                                                                                                       26
+
+
+least two indicators and the measurement errors are uncorrelated. The composite model is
+identified since each composite is scaled and related to at least one other variable next to
+its indicators. The structural model is identified as it meets the recursive rule, i.e., the
+structural model contains no feedback loops and the structural error terms are uncorrelated
+and uncorrelated with η1 and η3 . Furthermore, no indicator is related to more than one
+construct. Following this, we calculate the degrees of freedom. It is important to note that,
+unlike common factors, the variances of composites are inherently determined within the
+model. This applies to composites in both dependent and independent positions in the
+structural model. Consequently, as shown in Equations (27) and (28), the variances of the
+composites depend on the other model parameters. As a result, the variances of the
+structural error terms related to composites, such as ζ4 in this example, are fully
+determined by the remaining model parameters, as illustrated in Equation (30). The
+degrees of freedom of our example model are calculated as follows:
+
+
+df =                    91
+                       |{z}                         −             6
+                                                                 |{z}               −                    16
+                                                                                                        |{z}                      −           4
+                                                                                                                                             |{z}             −
+       Number of non-redundant variances and             Number of free variances            Number of free variances and             Number of free latent
+           covariances of the indicators                of the measurement errors       covariances of the composite indicators         variable loadings
+
+             5
+            |{z}           −        5
+                                   |{z}         −              1
+                                                              |{z}              −           1
+                                                                                           |{z}             −             1
+                                                                                                                         |{z}              = 52 > 0.
+        Number of free         Number of free       Number of free variances           Number of free           Number of free variances
+       composite weights       elements in B        of structural error terms       construct covariances         of common factors
+
+
+
+
+          Once the model is identified, we can estimate and asses it using the methods known
+from the traditional SEM framework. To do so, we make use of the R package lavaan as
+explained in the previous section. Specifically, we estimate the parameters using the ML
+estimator. Table 1 shows the parameter estimates. Given that the data perfectly represents
+the population, all population parameters were retrieved.
+
+          Next, we evaluate the finite sample behavior of our approach. FC-SEM enables us
+to use estimators from the traditional SEM framework to estimate model parameters.
+Consequently, we do not expect the finite sample behavior of the ML estimator, for
+example, to be different when applied to models involving composites and common factors
+than when applied to models involving only common factors. To verify this further, we ran
+    FACTOR- AND COMPOSITE-BASED SEM                                                                 27
+
+
+    a small Monte Carlo simulation in which we drew 1,000 samples from a multivariate
+    normal distribution with a mean vector of zero and the population variance-covariance
+    matrix of the indicators, each with a sample size of 500. Table (2) illustrates the average
+    parameter estimates and the ratio between the average standard errors and the empirical
+    standard deviations of the point estimates across all replications. As expected, the
+    parameter estimates are, on average, close to their population counterparts. Moreover,
+    most of the average standard errors are close to the empirical standard errors. In summary,
+    our approach yields consistent estimates that are, on average, close to their population
+    counterparts.
+
+                                         Empirical Example
+
+           In this section, we demonstrate how FC-SEM can be employed in the R package
+    lavaan by means of an empirical example. Additionally, we compare the results of our
+    approach to those of IGSCA, PLSc, and the H–O specification. For this purpose, we
+    employ the American Customer Satisfaction Index dataset, which has recently been
+    examined in the context of IGSCA (Hwang et al., 2023) and PLS-PM (Hair et al., 2022).
+    The model comprises eight constructs in total, four of which are modeled as composites:
+    quality, composed of eight indicators; performance, composed of five indicators; corporate
+    social responsibility, composed of five indicators; and attractiveness, composed of three
+    indicators. The remaining four constructs are modeled as common factors: competence,
+    customer loyalty, and likeability, each with three measures, and customer satisfaction,
+    which is measured by a single indicator. For a detailed description of the data, we refer the
+    reader to Hair et al. (2022).6
+           The first step involves specifying the model in lavaan syntax as illustrated as
+    follows:
+
+1   model <- ’
+
+    6
+      The R Code used for the empirical example is available via the following link:
+    https://osf.io/9tm2y/?view_only=59d9792bab994892a735e4efc763b511. The data is available via Hwang
+    et al. (2023).
+     FACTOR- AND COMPOSITE-BASED SEM                                                                           28
+
+
+ 2   # Specification of the composites
+ 3   Quality                  <~ qual_1 + qual_2 + qual_3 + qual_4 +
+ 4                                 qual_5 + qual_6 + qual_7 + qual_8
+ 5   Performance              <~ perf_1 + perf_2 + perf_3 + perf_4 + perf_5
+ 6   CorpSocResp              <~ csor_1 + csor_2 + csor_3 + csor_4 + csor_5
+ 7   Attractiveness <~ attr_1 + attr_2 + attr_3
+ 8
+
+
+ 9   # Specification of the latent variables
+10   Competence                  =~ comp_1 + comp_2 + comp_3
+11   CustomerLoyalty             =~ cusl_1 + cusl_2 + cusl_3
+12   Likeability                 =~ like_1 + like_2 + like_3
+13
+
+
+14   # Specification of the single indicator latent variable
+15   C u s t o m e r S a t i s f a c t i o n =~ cusa
+16
+
+
+17   # Specification of the structural model
+18   Competence                         ~ Quality + Performance + CorpSocResp +
+19                                          Attractiveness
+20   Likeability                        ~ Quality + Performance + CorpSocResp +
+21                                          Attractiveness
+22   C u s t o m e r S a t i s f a c t i o n ~ Competence + Likeability
+23   CustomerLoyalty                    ~ C u s t o m e r S a t i s f a c t i o n + Competence + Likeability
+24   ’
+
+     Similar to scaling common factors, the default behavior in lavaan is to scale composites by
+     setting the weight of their first indicator to one.
+              To conduct our approach to SEM with composites and common factors and
+     estimate the model parameters, we utilize the sem() function of the lavaan package:
+
+ 1   fit <- sem ( model , data = data , optim . gradient = " numerical " )
+ 2   summary ( fit , standardized = TRUE , fit . measures = TRUE )
+
+     Per default, the ML estimator is used to obtain parameter estimates. Table 3 shows the
+     standardized parameter estimates produced by our approach. For simplicity, we only report
+FACTOR- AND COMPOSITE-BASED SEM                                                             29
+
+
+the parameter estimates of the loadings of the indicators related to likeability, the weights
+to form attractiveness, and the structural model for customer loyalty. The remaining model
+parameters along with the summary output can be found in the supplementary material.
+Additionally, we report the results of IGSCA (using GSCAPro, Hwang, Cho, & Choo,
+2021), PLSc (using the R package cSEM, Rademaker & Schuberth, 2020) and the H–O
+specification (using the ML estimator as implemented in the package lavaan).
+
+       Table 3 shows that the standardized parameter estimates are similar among the
+different approaches. While the results of PLSc and IGSCA differ slightly from those of our
+approach due to the different estimation algorithms, the results of the H–O specification
+are almost identical to the results of our approach. To conclude, the results of our proposed
+approach to SEM with common factors and composites are similar to those of other
+approaches to study such models, enabling researchers to draw comparable conclusions.
+
+                                        Discussion
+
+       In this study, we introduce an approach to study structural equation models
+involving composites and common factors which allows us to derive a closed form
+expression for the variance-covariance matrix implied by such models. Additionally, we
+present the necessary conditions for identifying the model parameters. This specification
+along with its model-implied variance-covariance matrix allow us to apply approaches to
+model estimation and assessment developed in the traditional SEM framework. We refer to
+our approach as factor- and composite-based SEM, i.e., FC-SEM.
+
+       We demonstrate the necessity of our approach by addressing the limitations of
+existing methods used to analyze structural equation models incorporating both common
+factors and composites. Specifically, our approach overcomes the limitations of approaches
+developed outside the traditional SEM framework, such as PLSc, IGSCA, SVD-SEM, and
+RML-SEM. First, unlike PLSc, our approach allows us to restrict model parameters,
+enabling us to incorporate prior knowledge. Second, unlike PLSc, IGSCA, and SVD-SEM,
+our approach allows for the analytic derivation of standard errors, so inference on the
+FACTOR- AND COMPOSITE-BASED SEM                                                            30
+
+
+model parameter estimates does not have to rely on non-parametric methods such as
+bootstrap. Therefore, our approach can decrease computational time and enables the
+analytic derivation of the corresponding statistical properties. Third, our approach enables
+the estimation of both standardized and unstandardized parameter estimates, as
+composites are not restricted to having a unit variance, overcoming limitations in PLSc,
+SVD-SEM, and RML-SEM. Fourth, our approach allows for different scaling methods, so it
+does not rely on constrained optimization, as is done in RML-SEM. Finally, our approach
+enables researchers to apply developments of the traditional SEM framework, such as
+model fit assessment and handling missing values, directly to models involving common
+factors and composites. In contrast, such enhancements require additional effort for PLSc,
+IGSCA, SVD-SEM, and RML-SEM as researchers must develop new methods for these
+estimators instead of relying on existing methods.
+
+
+       Moreover, our approach overcomes the limitations of model specifications for
+structural equation models involving common factors and composites designed so that they
+can be incorporated in the traditional SEM framework. Specifically, it overcomes the
+limitations of the one-step approach, the pseudo-indicator approach, and the H-O
+specification. First, our approach addresses the shortcomings of the one-step approach by
+allowing composites to be included in dependent and independent positions of the
+structural model. Consequently, composites can also be explained by other constructs, and
+particularly mediation analysis with composites as mediators or outcome variables is
+feasible. Second, we overcome the limitations of the pseudo-indicator approach by allowing
+composite weights to be freely estimated. Thus, weights can be obtained optimally within
+the model instead of outside the model framework. Finally, FC-SEM overcomes the H-O
+specification’s limitations in terms of model specification. Specifically, with the H-O
+specification, researchers must specify the composites in terms of composite loadings by
+introducing additional variables. Furthermore, to apply the H-O specification using
+traditional SEM software, researchers must restrict parameters, such as measurement
+FACTOR- AND COMPOSITE-BASED SEM                                                                  31
+
+
+errors related to composite indicators, to zero and adjust the starting values for model
+parameters related to the additional variables. Additionally, due to the more complicated
+model specification, traditional SEM software tends to experience more convergence issues
+when the H-O specification is employed (Schamberger et al., forthcoming). Finally, the
+actual parameters of a composite model – i.e., the composite weights, indicator variances,
+and indicator covariances – are no direct model parameters in the H-O specification.
+Rather, they must be derived from the model parameters obtained by this specification.
+This complicates the inference and restriction of these parameters. In summary, our
+approach surpasses existing methods for analyzing structural equation models involving
+composites and common factors in terms of model specification, identification, assessment,
+and application of traditional SEM approaches. Further, our approach offers more
+flexibility in terms of model specification by, e.g., allowing for specifying cross-weights or
+covariances between composite indicators and measurement errors. A detailed comparison
+of the capabilities of the different approaches is given in Table 4.
+
+
+
+       To demonstrate our approach, we conducted a scenario analysis using a sample
+accurately representing the population. This scenario analysis confirmed that our approach
+to SEM with common factors and composites employing the ML estimator can retrieve the
+population parameters in such a scenario. Moreover, a small simulation study confirmed
+that FC-SEM when using the ML estimator yields parameter estimates that are, on
+average, close to the population counterparts in finite samples. Additionally, we presented
+an empirical example to illustrate our method and demonstrate how it can be applied using
+the open-source R package lavaan. We further compared the results of our approach with
+those of other methods for estimating structural equation models involving composites and
+common factors. This comparison demonstrates that the standardized parameter estimates
+are similar among the approaches.
+
+       We have demonstrated that our approach allows for reliance on approaches
+FACTOR- AND COMPOSITE-BASED SEM                                                               32
+
+
+developed in the traditional SEM framework in terms of model estimation and model
+assessment. Subsequently, conclusions about these approaches, e.g., in terms of
+performance in finite samples, can be transferred to our approach. Furthermore, our model
+specification allows us to apply developments of the traditional SEM framework such as
+handling missing data, multi-group analysis, and examining mediation effects. Future
+research should explore the performance of these techniques for our approach in more
+detail. Generally, assessing the overall model fit is well explored for structural equation
+models involving only common factors. However, some of the criteria are not well suited to
+assess models involving composites (Henseler, Schuberth, et al., 2025; Schuberth, 2021).
+Specifically, measures for assessing validity or reliability are designed for common factors,
+limiting their applicability for composite models. Currently, research on the use of model
+fit criteria for composite models is rather limited (Hwang et al., 2023; Schuberth,
+Rademaker, & Henseler, 2023). Future research should elaborate more on the applicability
+and interpretability of different model assessment criteria for structural equation models
+with common factors and composites. Additionally, new criteria should be developed to
+assess such models. Moreover, currently indicators are restricted to be either composite or
+common factor indicators. Future research should elaborate on including indicators as
+measures for common factors and indicators of composites simultaneously. Further,
+currently our approach is only implemented in the open-source software lavaan which
+currently limits its availability to R users. Future research hopefully integrates it in other
+software packages. Finally, it is crucial to investigate the assumption that composite
+indicators are free from measurement error. Given the likelihood of measurement errors in
+empirical research, strategies to incorporate and address such errors within our framework
+should be developed.
+
+
+       In conclusion, our approach significantly broadens the applicability of SEM for
+studying structural equation models involving composites and common factors, making it
+more accessible and practical for a wider research audience.
+FACTOR- AND COMPOSITE-BASED SEM                                                33
+
+
+Open Practices Statement: The R code used for the scenario analysis, for the
+simulation and for the empirical example are available via:
+https://osf.io/9tm2y/?view_only=59d9792bab994892a735e4efc763b511
+FACTOR- AND COMPOSITE-BASED SEM                                                             34
+
+
+                                        References
+
+Bollen, K. A. (1989). Structural equations with latent variables. John Wiley & Sons Inc.
+Bollen, K. A. (1996). An alternative two stage least squares (2SLS) estimator for latent
+       variable equations. Psychometrika, 61 (1), 109–121.
+       https://doi.org/10.1007/BF02296961
+Bollen, K. A., & Bauldry, S. (2011). Three Cs in measurement models: Causal indicators,
+       composite indicators, and covariates. Psychological Methods, 16 (3), 265–284.
+       https://doi.org/10.1037/a0024448
+Bollen, K. A., & Davis, W. R. (2009). Causal indicator models: Identification, estimation,
+       and testing. Structural Equation Modeling: A Multidisciplinary Journal, 16 (3),
+       498–522. https://doi.org/10.1080/10705510903008253
+Bollen, K. A., Fisher, Z., Lilly, A., Brehm, C., Luo, L., Martinez, A., & Ye, A. (2022). Fifty
+       years of structural equation modeling: A history of generalization, unification, and
+       diffusion. Social Science Research, 107, 102769.
+       https://doi.org/10.1016/j.ssresearch.2022.102769
+Browne, M. W. (1984). Asymptotically distribution-free methods for the analysis of
+       covariance structures. British Journal of Mathematical and Statistical Psychology,
+       37 (1), 62–83. https://doi.org/10.1111/j.2044-8317.1984.tb00789.x
+Browne, M. W. (1974). Generalized least squares estimators in the analysis of covariance
+       structures. South African Statistical Journal, 8 (1), 1–24.
+       https://doi.org/10.1002/j.2333-8504.1973.tb00197.x
+Browne, M. W., & Cudeck, R. (1992). Alternative ways of assessing model fit. Sociological
+       Methods & Research, 21 (2), 230–258. https://doi.org/10.1177/0049124192021002005
+Chen, W., Gao, Y., Ren, R., Bi, Y., & Liao, Y. (2025). Socioeconomic status and internet
+       addiction: Double-mediated moderation. BMC Public Health, 25 (1).
+       https://doi.org/10.1186/s12889-024-21153-w
+FACTOR- AND COMPOSITE-BASED SEM                                                             35
+
+
+Cho, G., Hwang, H., & Sarstedt, M. (2022). A comparative evaluation of factor- and
+       component-based structural equation modeling approaches under (in)correct
+       construct representations. British Journal of Mathematical and Statistical
+       Psychology, 75 (2), 220–251. https://doi.org/10.1111/bmsp.12255
+Davidson, R., & MacKinnon, J. G. (1993). Estimation and inference in econometrics.
+       Oxford University Press.
+Dhaene, S., & Rosseel, Y. (2023). An evaluation of non-iterative estimators in the
+       structural after measurement (SAM) approach to structural equation modeling
+       (SEM). Structural Equation Modeling: A Multidisciplinary Journal, 30 (6), 926–940.
+       https://doi.org/10.1080/10705511.2023.2220135
+Diamantopoulos, A., & Winklhofer, H. M. (2001). Index construction with formative
+       indicators: An alternative to scale development. Journal of Marketing Research,
+       38 (2), 269–277. https://doi.org/10.1509/jmkr.38.2.269.18845
+Dijkstra, T. K. (1983). Some comments on maximum likelihood and partial least squares
+       methods. Journal of Econometrics, 22, 67–90.
+       https://doi.org/10.1016/0304-4076(83)90094-5
+Dijkstra, T. K. (2013). Composites as factors, generalized canonical variables revisited.
+       Working Paper. https://doi.org/10.13140/RG.2.1.3426.5449
+Dijkstra, T. K. (2017). A perfect match between a model and a mode. In H. Latan &
+       R. Noonan (Eds.), Partial least squares path modeling (pp. 55–80). Springer Verlag.
+Dijkstra, T. K., & Henseler, J. (2015a). Consistent and asymptotically normal PLS
+       estimators for linear structural equations. Computational Statistics & Data
+       Analysis, 81, 10–23. https://doi.org/10.1016/j.csda.2014.07.008
+Dijkstra, T. K., & Henseler, J. (2015b). Consistent partial least squares path modeling.
+       MIS Quarterly, 39 (2), 29–316. https://doi.org/10.25300/MISQ/2015/39.2.02
+FACTOR- AND COMPOSITE-BASED SEM                                                             36
+
+
+Edwards, J. R., & Bagozzi, R. P. (2000). On the nature and direction of relationships
+       between constructs and measures. Psychological Methods, 5 (2), 155.
+       https://doi.org/10.1037/1082-989X.5.2.155
+Fornell, C., & Bookstein, F. L. (1982). Two structural equation models: LISREL and PLS
+       applied to consumer exit-voice theory. Journal of Marketing Research, 19 (4),
+       440–452. https://doi.org/10.1177/0022243782019004
+Gerino, E., Rollè, L., Sechi, C., & Brustia, P. (2017). Loneliness, resilience, mental health,
+       and quality of life in old age: A structural equation model. Frontiers in Psychology,
+       8. https://doi.org/10.3389/fpsyg.2017.02003
+Grace, J. B., & Bollen, K. A. (2008). Representing general theoretical concepts in
+       structural equation models: The role of composite variables. Environmental and
+       Ecological Statistics, 15, 191–213. https://doi.org/10.1007/s10651-007-0047-7
+Graham, J. M. (2008). The general linear model as structural equation modeling. Journal
+       of Educational and Behavioral Statistics, 33 (4), 485–506.
+       https://doi.org/10.3102/1076998607306151
+Hair, G. T. M. H., Joseph F., Ringle, C. M., & Sarstedt, M. (2022). A primer on partial
+       least squares structural equation modeling (PLS-SEM) (Third edition). SAGE
+       Publications, Incorporated.
+Henseler, J. (2012). Why generalized structured component analysis is not universally
+       preferable to structural equation modeling. Journal of the Academy of Marketing
+       Science, 40, 402–413. https://doi.org/10.1007/s11747-011-0298-6
+Henseler, J. (2017). Bridging design and behavioral research with variance-based structural
+       equation modeling. Journal of Advertising, 46 (1), 178–192.
+       https://doi.org/10.1080/00913367.2017.1281780
+Henseler, J. (2021). Composite-based structural equation modeling: Analyzing latent and
+       emergent variables. Guilford Press.
+FACTOR- AND COMPOSITE-BASED SEM                                                               37
+
+
+Henseler, J., & Schuberth, F. (2020a). Auxiliary theories. In J. Henseler (Ed.),
+       Composite-based structural equation modeling: Analyzing latent and emergent
+       variables (pp. 25–37). Guilford Press.
+Henseler, J., & Schuberth, F. (2020b). Using confirmatory composite analysis to assess
+       emergent variables in business research. Journal of Business Research, 120, 147–156.
+       https://doi.org/10.1016/j.jbusres.2020.07.026
+Henseler, J., Schuberth, F., Lee, N., & Kemény, I. (2025). Why researchers should be
+       cautious about using PLS-SEM. Industrial Marketing Management.
+       https://doi.org/10.1016/j.indmarman.2024.01.017
+Henseler, J., Yu, X., Schamberger, T., Hancock, G. R., & Schuberth, F. (2025). Specifying
+       composites in structural equation modeling: Traditional, recent and new
+       approaches. https://doi.org/10.48550/ARXIV.2509.01292
+Higgins, G. E. (2002). General theory of crime and deviance: A structural equation
+       modeling approach. Journal of Crime and Justice, 25 (2), 71–95.
+       https://doi.org/10.1080/0735648X.2002.9721158
+Hoyle, R. H., & Gottfredson, N. C. (2023). Structural equation modeling with latent
+       variables. In APA handbook of research methods in psychology: Research designs:
+       Quantitative, qualitative, neuropsychological, and biological (vol. 2) (2nd ed.).
+       (pp. 459–490). American Psychological Association.
+       https://doi.org/10.1037/0000319-021
+Hu, L.-t., & Bentler, P. M. (1999). Cutoff criteria for fit indexes in covariance structure
+       analysis: Conventional criteria versus new alternatives. Structural Equation
+       Modeling: A Multidisciplinary Journal, 6 (1), 1–55.
+       https://doi.org/10.1080/10705519909540118
+Hui, B. S., & Wold, H. (1982). Consistency and consistency at large of partial least squares
+       estimates. In K. G. Jöreskog & H. Wold (Eds.), Systems under indirect observation:
+       Causality, structure, prediction part ii (pp. 119–130). North-Holland.
+FACTOR- AND COMPOSITE-BASED SEM                                                          38
+
+
+Hult, G. T. M., Ketchen, D. J., Cui, A. S., Prud’homme, A. M., Seggie, S. H.,
+       Stanko, M. A., Xu, A. S., & Cavusgil, S. T. (2006). An assessment of the use of
+       structural equation modeling in international business research. In Research
+       methodology in strategy and management (pp. 385–415, Vol. 3). Emerald.
+Hwang, H., Cho, G., & Choo, H. (2021). GSCA Pro version 1.1.
+Hwang, H., Cho, G., Jung, K., Falk, C., Flake, J., Jin, M. J., & Lee, S. H. (2021). An
+       approach to structural equation modeling with both factors and components:
+       Integrated generalized structured component analysis. Psychological Methods, 26 (3),
+       273–294. https://doi.org/10.1037/met0000336
+Hwang, H., Cho, G., Jung, K., Falk, C. F., Flake, J. K., Jin, M. J., & Lee, S. H. (2020). An
+       approach to structural equation modeling with both factors and components:
+       Integrated generalized structured component analysis. Psychological Methods, 26 (3),
+       273–294. https://doi.org/10.1037/met0000336
+Hwang, H., Sarstedt, M., Cho, G., Choo, H., & Ringle, C. M. (2023). A primer on
+       integrated generalized structured component analysis. European Business Review,
+       35 (3), 261–284. https://doi.org/10.1108/ebr-11-2022-0224
+Hwang, H., & Takane, Y. (2004). Generalized structured component analysis.
+       Psychometrika, 69 (1), 81–99. https://doi.org/10.1007/BF02295841
+Hwang, H., & Takane, Y. (2014). Generalized structured component analysis. CRC Press.
+Hwang, H., Takane, Y., & Jung, K. (2017). Generalized structured component analysis
+       with uniqueness terms for accommodating measurement error. Frontiers in
+       Psychology, 8: 2137. https://doi.org/10.3389/fpsyg.2017.02137
+Jöreskog, K. G. (1969). A general approach to confirmatory maximum likelihood factor
+       analysis. Psychometrika, 34 (2), 183–202. https://doi.org/10.1007/BF02289343
+Jöreskog, K. G. (1970). A general method for estimating a linear structural equation
+       system. ETS Research Bulletin Series, 1970 (2), i–41.
+       https://doi.org/10.1002/j.2333-8504.1970.tb00783.x
+FACTOR- AND COMPOSITE-BASED SEM                                                          39
+
+
+Jöreskog, K. G., & Goldberger, A. S. (1972). Factor analysis by generalized least squares.
+       Psychometrika, 37 (3), 243–260. https://doi.org/10.1007/BF023067820
+Jöreskog, K. G., & Sörbom, D. (1988). LISREL 7: A guide to the program and
+       applications. SPSS.
+Jöreskog, K. G., & Sörbom, D. (1993). LISREL 8: Structural equation modeling with the
+       SIMPLIS command language. Scientific Software International; Lawrence Erlbaum
+       Associates, Inc.
+Jorgensen, T. D. (2017). IMPS 2019 symposium: The lavaan ecosystem.
+       https://doi.org/10.17605/OSF.IO/BCY78
+Klopp, E., & Klößner, S. (2021). The impact of scaling methods on the properties and
+       interpretation of parameter estimates in structural equation models with latent
+       variables. Structural Equation Modeling: A Multidisciplinary Journal, 28 (2),
+       182–206. https://doi.org/10.1080/10705511.2020.1796673
+Lawley, D. N., & Maxwell, A. E. (1963). Factor analysis as a statistical method.
+       Butterworths.
+Little, T. D., Cunningham, W. A., Shahar, G., & Widaman, K. F. (2002). To parcel or not
+       to parcel: Exploring the question, weighing the merits. Structural Equation
+       Modeling: A Multidisciplinary Journal, 9 (2), 151–173.
+       https://doi.org/10.1207/s15328007sem0902_1
+Lohmöller, J.-B. (1989). Latent variable path modeling with partial least squares.
+       Physica-Verlag.
+MacCallum, R. C., & Austin, J. T. (2000). Applications of structural equation modeling in
+       psychological research. Annual Review of Psychology, 51 (1), 201–226.
+       https://doi.org/10.1146/annurev.psych.51.1.201
+McArdle, J. J. (1988). Dynamic but structural equation modeling of repeated measures
+       data. In Handbook of multivariate experimental psychology (pp. 561–614). Springer.
+       https://doi.org/10.1007/978-1-4613-0893-5_17
+FACTOR- AND COMPOSITE-BASED SEM                                                              40
+
+
+O’Brien, R. M. (1994). Identification of simple measurement models with multiple latent
+       variables and correlated errors. Sociological Methodology, 24, 137–170.
+       https://doi.org/10.2307/270981
+R Core Team. (2020). R: A language and environment for statistical computing. R
+       Foundation for Statistical Computing. Vienna, Austria.
+Rademaker, M. E., & Schuberth, F. (2020). cSEM: Composite-based structural equation
+       modeling. https://github.com/M-E-Rademaker/cSEM
+Rademaker, M. E., Schuberth, F., & Dijkstra, T. K. (2019). Measurement error correlation
+       within blocks of indicators in consistent partial least squares. Internet Research,
+       29 (3), 448–463. https://doi.org/10.1108/intr-12-2017-0525
+Rai, A., Patnayakuni, R., & Seth, N. (2006). Firm performance impacts of digitally enabled
+       supply chain integration capabilities. MIS Quarterly, 30 (2), 225–246.
+       https://doi.org/10.2307/25148729
+Rhemtulla, M., van Bork, R., & Borsboom, D. (2020). Worse than measurement error:
+       Consequences of inappropriate latent variable measurement models. Psychological
+       Methods, 25 (1), 30–45. https://doi.org/10.1037/met0000220
+Richardson, M. W. (1936). Notes on the rationale of item analysis. Psychometrika, 1 (1),
+       69–76. https://doi.org/10.1007/bf02287926
+Rigdon, E. E. (2012). Rethinking partial least squares path modeling: In praise of simple
+       methods. Long Range Planning, 45 (5), 341–358.
+       https://doi.org/10.1016/j.lrp.2012.09.010
+Rigdon, E. E. (2016). Choosing PLS path modeling as analytical method in European
+       management research: A realist perspective. European Management Journal, 34 (6),
+       598–605. https://doi.org/10.1016/j.emj.2016.05.006
+Rose, N., Wagner, W., Mayer, A., & Nagengast, B. (2019). Model-based manifest and
+       latent composite scores in structural equation models. Collabra: Psychology, 5 (1).
+       https://doi.org/10.1525/collabra.143
+FACTOR- AND COMPOSITE-BASED SEM                                                            41
+
+
+Rosseel, Y. (2012). lavaan: An R package for structural equation modeling. Journal of
+       Statistical Software, 48 (2), 1–36. https://doi.org/10.18637/jss.v048.i02
+Rosseel, Y., Jorgensen, T. D., & De Wilde, L. (2025). lavaan: Latent variable analysis [R
+       package version 0.6-20]. https://doi.org/10.32614/CRAN.package.lavaan
+Rosseel, Y., & Loh, W. W. (2024). A structural after measurement approach to structural
+       equation modeling. Psychological Methods, 29 (3), 561–588.
+       https://doi.org/10.1037/met0000503
+Sarstedt, M., Hair, J. F., Ringle, C. M., Thiele, K. O., & Gudergan, S. P. (2016).
+       Estimation issue with PLS and CBSEM: Where the bias lies! Journal of Business
+       Research, 69 (10), 3998–4010. https://doi.org/10.1016/j.jbusres.2016.06.007
+Savalei, V., & Rosseel, Y. (2021). Computational options for standard errors and test
+       statistics with incomplete normal and nonnormal data in SEM. Structural Equation
+       Modeling: A Multidisciplinary Journal, 29 (2), 163–181.
+       https://doi.org/10.1080/10705511.2021.1877548
+Schamberger, T. (2022). Methodological advances in composite-based structural equation
+       modeling. https://doi.org/10.3990/1.9789036553759
+Schamberger, T., Schuberth, F., & Henseler, J. (forthcoming). Moderated mediation with
+       composites: The composite moderated structural equations approach. Behavior
+       Research Methods.
+Schermelleh-Engel, K., Moosbrugger, H., & Müller, H. (2003). Evaluating the fit of
+       structural equation models: Tests of significance and descriptive goodness-of-fit
+       measures. Methods of Psychological Research, 8 (2), 23–74.
+Schuberth, F. (2021). Confirmatory composite analysis using partial least squares: Setting
+       the record straight. Review of Managerial Science, 15, 1311–1345.
+       https://doi.org/10.1007/s11846-020-00405-0
+FACTOR- AND COMPOSITE-BASED SEM                                                             42
+
+
+Schuberth, F. (2023). The Henseler-Ogasawara specification of composites in structural
+       equation modeling: A tutorial. Psychological Methods, 28 (4), 843–859.
+       https://doi.org/10.1037/met0000432
+Schuberth, F., Henseler, J., & Dijkstra, T. K. (2018a). Confirmatory composite analysis.
+       Frontiers in Psychology, 9:2541. https://doi.org/10.3389/fpsyg.2018.02541
+Schuberth, F., Henseler, J., & Dijkstra, T. K. (2018b). Partial least squares path modeling
+       using ordinal categorical indicators. Quality & Quantity, 52 (1), 9–35.
+       https://doi.org/10.1007/s11135-016-0401-7
+Schuberth, F., Hubona, G., Roemer, E., Zaza, S., Schamberger, T., Chuah, F.,
+       Cepeda-Carrión, G., & Henseler, J. (2023). The choice of structural equation
+       modeling technique matters: A commentary on Dash and Paul (2021). Technological
+       Forecasting and Social Change, 194, 122665.
+       https://doi.org/10.1016/j.techfore.2023.122665
+Schuberth, F., Rademaker, M. E., & Henseler, J. (2023). Assessing the overall fit of
+       composite models estimated by partial least squares path modeling. European
+       Journal of Marketing, 57 (6), 1678–1702. https://doi.org/10.1108/EJM-08-2020-0586
+Schuberth, F., Schamberger, T., & Henseler, J. (2024). More powerful parameter tests? No,
+       rather biased parameter estimates. Some reflections on path analysis with weighted
+       composites. Behavior Research Methods, 56 (4), 4205–4215.
+       https://doi.org/10.3758/s13428-023-02256-5
+Schuberth, F., Schamberger, T., Kemény, I., & Henseler, J. (2025). The sum score model:
+       Specifying and testing equally weighted composites using structural equation
+       modeling. Psychometrika, 1–43. https://doi.org/10.1017/psy.2024.5
+Schuberth, F., Zaza, S., & Henseler, J. (2023). Partial least squares is an estimator for
+       structural equation models: A comment on Evermann and Rönkkö (2021).
+       Communications of the Association for Information Systems, 52 (1), 711–714.
+       https://doi.org/10.17705/1cais.05232
+FACTOR- AND COMPOSITE-BASED SEM                                                             43
+
+
+Spearman, C. (1904). “General intelligence,” objectively determined and measured. The
+       American Journal of Psychology, 15 (2), 201–292. https://doi.org/10.2307/1412107
+Strauss, M. E., & Smith, G. T. (2009). Construct validity: Advances in theory and
+       methodology. Annual Review of Clinical Psychology, 5 (1), 1–25.
+       https://doi.org/10.1146/annurev.clinpsy.032408.153639
+Tarka, P. (2017). An overview of structural equation modeling: Its beginnings, historical
+       development, usefulness and controversies in the social sciences. Quality & Quantity,
+       52 (1), 313–354. https://doi.org/10.1007/s11135-017-0469-8
+Tenenhaus, A., Tenenhaus, M., & Dijkstra, T. K. (2025). Structural equation modeling
+       with factors and composites within the framework of the basic design. Advances in
+       Data Analysis and Classification. https://doi.org/10.1007/s11634-025-00647-4
+Verheyen, K., Guntenspergen, G. R., Biesbrouck, B., & Hermy, M. (2003). An integrated
+       analysis of the effects of past land use on forest herb colonization at the landscape
+       scale. Journal of Ecology, 91 (5), 731–742.
+       https://doi.org/10.1046/j.1365-2745.2003.00807.x
+Wilks, S. S. (1938). The large-sample distribution of the likelihood ratio for testing
+       composite hypotheses. The Annals of Mathematical Statistics, 9 (1), 60–62.
+       https://doi.org/10.1214/aoms/1177732360
+Wold, H. (1975). Path models with latent variables: The NIPALS approach. Academic
+       Press. https://doi.org/10.1016/B978-0-12-103950-9.50017-4
+Wold, H. (1982). Soft modeling: The basic design and some extensions. In K. G. Jöreskog
+       & H. Wold (Eds.), Systems under indirect observation: Causality, structure,
+       prediction part ii (pp. 1–54). North-Holland.
+Wright, S. (1934). The method of path coefficients. The Annals of Mathematical Statistics,
+       5 (3), 161–215.
+FACTOR- AND COMPOSITE-BASED SEM                                                             44
+
+
+Yu, X., Schuberth, F., & Henseler, J. (2023). Specifying composites in structural equation
+       modeling: A refinement of the Henseler-Ogasawara specification. Statistical Analysis
+       and Data Mining, 16, 348–357. https://doi.org/10.1002/sam.11608
+Yu, X., Zaza, S., Schuberth, F., & Henseler, J. (2021). Counterpoint: Representing forged
+       concepts as emergent variables using composite-based structural equation modeling.
+       ACM SIGMIS Database: the DATABASE for Advances in Information Systems,
+       52 (SI), 114–130. https://doi.org/10.1145/3505639.3505647
+
+
+                                         Appendix
+
+Model Specification
+
+       To obtain the composite loadings, regressions of the composites on their related
+indicators need to be performed. For a composite ηi formed by a set of indicators yi , it
+holds that:
+
+
+                                       ηi = wi′ yi                                        (31)
+
+                                      yi = λi ηi                                          (32)
+                                           cov(yi , ηi )
+                                   ⇒ λi =                                                 (33)
+                                             var(ηi )
+                                           cov(yi , wi′ yi )
+                                         =                                                (34)
+                                            wi′ V(yi )wi
+                                            V(yi )wi
+                                         = ′                                              (35)
+                                           wi V(yi )wi
+
+Combining this for all composites yields to:
+
+
+                                  Λc = T W (W ′ T W )−1
+FACTOR- AND COMPOSITE-BASED SEM                                                       45
+
+
+Scenario Analysis
+
+       The matrix T contains the unrestricted variances and covariances of the composite
+indicators. All remaining entries are set to 0, i.e.:
+                                                                           
+                               6       2     1.2     0      0    0     0
+                                                                          
+                               2       5     1.5     0      0    0      0
+                                                                          
+                                                                          
+                                                                          
+                              1.2      1.5   2       0      0    0      0
+                                                                          
+                                                                          
+                                                                          
+                           T =
+                               0       0     0       7     0.9 0.5     1.2         (36)
+                                                                          
+                                                                           
+                                                                          
+                               0       0     0      0.9     3    0.7   1.8
+                                                                          
+                                                                          
+                                                                          
+                               0       0     0      0.5 0.7      2     0.5
+                                                                          
+                                                                          
+                                                                          
+                                    0   0     0      1.2 1.8 0.5        5
+                                                                          
+
+
+
+The composite matrix W contains the composite weights in its columns, i.e.:
+                                                             
+                                           1.0            0.0
+                                                             
+                                           0.4            0.0
+                                                             
+                                                             
+                                                             
+                                           0.6            0.0
+                                                             
+                                                             
+                                                             
+                                        W =
+                                           0.0            1.0
+                                                             
+                                                              
+                                                             
+                                           0.0            0.2
+                                                             
+                                                             
+                                                             
+                                           0.0            0.5
+                                                             
+                                                             
+                                                             
+                                                    0.0 0.3
+                                                             
+FACTOR- AND COMPOSITE-BASED SEM                                                         46
+
+
+    Thus, the composite loading matrix is given as:
+                                                                
+                                          0.67          0.00
+                                                            
+                                          0.43          0.00
+                                                            
+                                                            
+                                                            
+                                          0.27          0.00
+                                                            
+                                                            
+                                                            
+                       Λ = T W (W T W ) = 
+                        c        ′     −1
+                                          0.00          0.77                        (37)
+                                                            
+                                                             
+                                                            
+                                          0.00          0.24
+                                                            
+                                                            
+                                                            
+                                          0.00          0.18
+                                                            
+                                                            
+                                                            
+                                                    0.00 0.33
+                                                            
+
+
+
+
+    The relations between the constructs and the indicators are therefore given as:
+                                                                    
+                        1.00      0.00 0.00 0.00  y1      ε1 
+                                                     
+                        0.80      0.00 0.00   0.00
+                                                     
+                                                     y2  ε2 
+                                                        
+                        
+                                                     
+                        0.90      0.00 0.00   0.00
+                                                     
+                                                     y3  ε3 
+                                                        
+                        
+                                                     
+                        0.00      1.00 0.00   0.00
+                                                     
+                                                     y4  ε4 
+                                                        
+                        
+                                                     
+                        0.00      0.70 0.00   0.00
+                                                     
+                                                     y5  ε5 
+                                                      
+                        
+                  η1 
+                                                     
+                        0.00      0.80 0.00   0.00
+                                                     
+                                                     y6  ε6 
+                                                      
+                      
+                  η                                
+                   2
+                    = 0.00      0.00 0.67         y7  +  0 
+                                               0.00                                  (38)
+                                                     
+                                                        
+                      
+                  η                                
+                   3
+                        0.00      0.00 0.43   0.00
+                                                     y8   0 
+                                                     
+                                                      
+                      
+                   η4                                
+                        0.00      0.00 0.27   0.00
+                                                     y9   0 
+                                                     
+                                                        
+                        
+                                                     
+                        0.00      0.00 0.00   0.77
+                                                    y10   0 
+                                                     
+                                                        
+                        
+                                                     
+                        0.00      0.00 0.00   0.24
+                                                    y11   0 
+                                                     
+                                                        
+                        
+                                                     
+                        0.00      0.00 0.00   0.18
+                                                    y12   0 
+                                                     
+                                                        
+                        
+                                                     
+                              0.00 0.00 0.00 0.33                    0
+                                                     
+                                                       y13
+
+
+
+
+    To obtain the variances of the error terms related to composites, we need to take
+FACTOR- AND COMPOSITE-BASED SEM                                                                           47
+
+
+into account that the variances of the composites are given by the composite model, i.e.:
+
+
+              η3 = 1 · y7 + 0.4 · y8 + 0.6 · y9 = (1.0 0.4 0.6)(y7 y8 y9 )′
+
+  ⇒      var(η3 ) = (1.0 0.4 0.6)V(y7 , y8 , y9 )(1.0 0.4 0.6)′ = 11.28
+
+              η4 = 1 · y10 + 0.2 · y11 + 0.5 · y12 + 0.3 · y13 = (1.0 0.2 0.5 0.3)(y10 y11 y12 y13 )′
+
+  ⇒      var(η4 ) = (1.0 0.2 0.5 0.3)V(y10 , y11 , y12 , y13 )(1.0 0.2 0.5 0.3)′ = 10.156
+
+
+As η4 is also a dependent variable in the structural model, it holds:
+
+
+                    η4 = 0.6 · η1 + +0.5 · η3 + ζ4
+
+        ⇒     var(η4 ) = 0.62 · var(η1 ) + 0.52 · var(η3 ) + 2 · 0.5 · 0.6 · cov(η1 , η3 ) + var(ζ4 )
+
+
+
+
+Thus, the variance of ζ4 is given as:
+
+
+      var(ζ4 ) = var(η4 ) − (0.62 · var(η1 ) + 0.52 · var(η3 ) + 2 · 0.5 · 0.6 · cov(η1 , η3 )) = 6.56
+
+
+Therefore, the model-implied variance-covariance matrix of the structural error terms is
+given as:
+                                                                          
+                                         2.00       0.00    0.10   0.00
+                                                                       
+                                         0.00       1.50    0.00   0.00
+                                                                       
+
+                                var(ζ) =                                                                (39)
+                                                                       
+                                                                        
+                                         0.10       0.00 11.28     0.00
+                                                                       
+                                                                       
+                                                                       
+                                             0.00 0.00       0.00   6.56
+                                                                       
+FACTOR- AND COMPOSITE-BASED SEM                                                                         48
+
+
+Consequently, the model-implied variance-covariance matrix of the constructs is given as:
+
+
+var(η) = (I − B)−1 var(ζ)(I − B)′−1
+                                     −1                                                            −1
+         1.0     0.0    0.0    0.0        2.00   0.00     0.10     0.00 1.0 −0.2 0.0 −0.6
+                                                                                                  
+                  1.0 −0.1                  0.00   1.50     0.00          0.0
+                                                                      0.00          1.0    0.0    0.0 
+                                                                                                  
+        −0.2                   −0.3                                       
+       =
+                                                                                                    
+                                                                                                   
+         0.0     0.0    1.0    0.0        0.10   0.00 11.28        0.00
+                                                                           0.0    −0.1 1.0
+                                                                                                  
+                                          
+                                                                                                 −0.5
+                                                                                                  
+             −0.6 0.0 −0.5      1.0          0.00 0.00       0.00     6.56     0.0 −0.3 0.0       1.0
+                                                                                                  
+
+                                       
+        2.00     0.78   0.10    1.25 
+                                     
+        0.78     3.10   2.86    3.87 
+                                     
+
+       =
+                                     
+                                      
+        0.10     2.86 11.28     5.70 
+                                     
+                                     
+                                     
+             1.25 3.87   5.70   10.16
+                                     
+
+
+
+       While the variance-covariance matrix of the measurement errors of the common
+factor indicators Θf is given as a diagonal matrix with 0.5 on the diagonal, the matrix Θc
+can be obtained as follows:
+                                                                                                   
+                              0.99           −1.27 −0.8            0.00     0.00   0.00     0.00 
+                                                                                                 
+                                               2.87        0.2      0.00     0.00   0.00    0.00 
+                                                                                                 
+                             −1.27
+                                                                                                 
+                                                                                                 
+                                               0.20        1.2      0.00     0.00   0.00    0.00 
+                                                                                                 
+                             −0.80
+                                                                                                 
+                                                                                                 
+                          ′
+    Θc = T − Λc W ′ T W Λc = 
+                              0.00            0.00    0.00         1.02
+                                                                                                 
+                                                                             −0.93 −0.87    −1.34
+                                                                                                 
+                              0.00            0.00    0.00 −0.93            2.44   0.28     1.02 
+                                                                                                 
+                                                                                                 
+                                                                                                 
+                              0.00            0.00    0.00 −0.87            0.28   1.68
+                                                                                                 
+                                                                                           −0.08
+                                                                                                 
+                                      0.00     0.00    0.00 −1.34            1.02            3.92
+                                                                                                 
+                                                                                    −0.08
+FACTOR- AND COMPOSITE-BASED SEM                                                         49
+
+
+     Finally, the model-implied variance-covariance matrix of the indicators is given as:
+                                                                                      
+        2.50                                                                          
+                                                                                      
+        1.60   1.78
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        1.80   1.44 2.12
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.78   0.63 0.71 3.60
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.55   0.44 0.49 2.17 2.02
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.63   0.50 0.57 2.48 1.74 2.49
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+ Σ(y) = 
+        0.07   0.05 0.06 1.91 1.33 1.52 6.00
+                                                                                      
+                                                                                       
+                                                                                       
+                                                                                      
+        0.04   0.03 0.04 1.24 0.87 0.99 2.00 5.00
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.03   0.02 0.02 0.76 0.53 0.61 1.20 1.50 2.00
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.96   0.77 0.86 2.97 2.08 2.37 2.91 1.90 1.16 7.00
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.29   0.24 0.26 0.91 0.64 0.73 0.89 0.58 0.36 0.90 3.00
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+        0.22   0.18 0.20 0.68 0.48 0.55 0.67 0.44 0.27 0.50 0.70 2.00
+                                                                                      
+                                                                                       
+                                                                                      
+                                                                                      
+         0.41 0.33 0.37 1.26 0.88 1.01 1.24 0.81 0.49 1.20 1.80 0.50 5.00
+                                                                                      
+FACTOR- AND COMPOSITE-BASED SEM                                                  50
+
+
+Table 1
+Parameter Estimates Obtained by FC-SEM for a Sample Perfectly Representing the
+Population
+
+                       Parameter           Population value   Estimate
+                            λ2                   0.8            0.8
+                            λ3                   0.9            0.9
+                            λ5                   0.7            0.7
+                            λ6                   0.8            0.8
+                            w8                   0.4            0.4
+                            w9                   0.6            0.6
+                           w11                   0.2            0.2
+                           w12                   0.5            0.5
+                           w13                   0.3            0.3
+                            b1                   0.5            0.5
+                            b2                   0.6            0.6
+                            b3                   0.2            0.2
+                            b4                   0.3            0.3
+                            b5                   0.1            0.1
+                           ψ11                   2.0            2.0
+                           ψ22                   1.5            1.5
+                           ψ13                   0.1            0.1
+                     θi (i = 1, . . . 6)         0.5            0.5
+FACTOR- AND COMPOSITE-BASED SEM                                                     51
+
+
+Table 2
+Average Parameter Estimates and Ratio Between The Average Standard Errors and the
+Empirical Standard Deviations Obtained by FC-SEM for the Simulation Study (N = 500)
+
+           Parameter   Population Value   Estimate     Average Standard Error
+                                                     Empirical Standard Deviation
+
+              λ2             0.8           0.798               0.905
+              λ3             0.9           0.900               0.919
+              λ5             0.7           0.699               0.782
+              λ6             0.8           0.800               0.813
+              w8             0.4           0.403               0.933
+              w9             0.6           0.609               0.926
+              w11            0.2           0.198               0.985
+              w12            0.5           0.496               0.983
+              w13            0.3           0.306               0.987
+              b1             0.5           0.505               0.984
+              b2             0.6           0.604               1.004
+              b3             0.2           0.200               1.118
+              b4             0.3           0.300               1.717
+              b5             0.1           0.100               1.443
+              ψ11            2.0           1.998               1.015
+              ψ22            1.5           1.490               1.149
+              ψ13            0.1           0.094               1.004
+FACTOR- AND COMPOSITE-BASED SEM                                                          52
+
+
+Table 3
+Standardized Parameter Estimates Obtained by FC-SEM, IGSCA, PLSc, and the H–O
+Specification for the Customer Satisfaction Example
+
+                                                                            H–O
+Parameter                                FC-SEM (ML)   IGSCA    PLSc     Specification
+                                                                            (ML)
+Likeability → like1                          0.833      0.801    0.857       0.833
+Likeability → like2                          0.774      0.811    0.763       0.774
+Likeability → like3                          0.746      0.760    0.741       0.746
+attr1 → Attractiveness                       0.430      0.512    0.418       0.430
+attr2 → Attractiveness                       0.174      0.264    0.204       0.174
+attr3 → Attractiveness                       0.663      0.533    0.656       0.662
+CustomerSatisfaction → CustomerLoyalty       0.488      0.535    0.501       0.488
+Competence → CustomerLoyalty                -0.090     -0.102   -0.115      -0.090
+Likeability → CustomerLoyalty                0.492      0.464    0.530       0.491
+Table 4
+Comparison of Various Approaches to Deal With Common Factors and Composites in SEM
+
+ Capabilities of the different approaches                                                             Pseudo-
+                                                                                          One-Step                  H-O
+                                                           PLSc   IGSCA   SVD-SEM   RML              Indicator                   FC-SEM
+                                                                                          Approach               Specification
+                                                                                                     Approach
+
+ Model Specification
+
+    Fix model parameters to specific values                 -      +/-      +       +       +          +/-          +/-            +
+
+    Constrain model parameters                              -     +/-       ❍       ❍       +           -             -            +
+
+    Specify cross-loadings                                  -      -        -        -      +           +            +             +
+
+    Specify cross-weights                                   -      -        -        -      ❍           -             -            +
+
+    Specify covariances between measurement errors         +/-     +        +       +       +           +            +             +
+    Specify covariances between composite indicators and
+                                                            -      -        -        -      ❍           -             -            +
+    measurement errors
+                                                                                                                                          FACTOR- AND COMPOSITE-BASED SEM
+
+
+
+
+    Specify composites as dependent variables in the
+                                                            +      +        +       +        -          +            +             +
+    structural model
+    Specify covariances between composites and other
+                                                            +      +        +       +        -          +            +             +
+    variables in the model
+    Specify the model in terms of the parameters of interest +     +        +       +       +           +             -            +
+
+ Model Estimation
+
+    Estimate the composite weights freely                   +      +        +       +       +           -            +             +
+
+    Estimate unstandardized path coefficients               -      +        -        -      +           +            +             +
+
+ Model Assessment
+
+    Calculate analytic asymptotic standard errors           ❍      ❍        ❍       +       +           +            +             +
+    Draw direct inference about the model parameters of
+                                                            +      +        +       +       +           +             -            +
+    interest
+ +: The respective approach has the capability; −: The respective approach does not have the capability; +/− In some situations the
+respective approach has the capability, in some situations it does not; ❍: It is unclear whether the respective approach has the
+capability.
+                                                                                                                                          53
+FACTOR- AND COMPOSITE-BASED SEM                              54
+
+
+Figure 1
+Example of a Common Factor η With P Measures y1 , . . . yP
+FACTOR- AND COMPOSITE-BASED SEM                            55
+
+
+Figure 2
+Example of a Composite η With P Indicators y1 , . . . yP
+FACTOR- AND COMPOSITE-BASED SEM   56
+
+
+Figure 3
+Population Model
+
