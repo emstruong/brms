@@ -91,6 +91,109 @@ constraint changes the picture substantially:
 - **`algorithm = "optimize"` (PR-A) is still first** — smallest patch,
   and it unblocks lavaan parity in the harness.
 
+### 0.3 Upstream context — issue #304 and the `brms3` branch
+
+This subsection rebaselines the plan against ongoing upstream work
+discovered after the first draft.
+
+**Resource access (this turn):**
+- ✅ `upstream/brms3` and `upstream/generalize-mi` fetched locally
+  (added as remote `upstream`; SHAs `4d3b308a` / `b9184f1c`).
+  `brms3` is `Version: 2.99.9002` — the brms-3.0 development branch.
+- ❌ **GitHub issue
+  [paul-buerkner/brms#304](https://github.com/paul-buerkner/brms/issues/304)**
+  — both WebFetch and the unauthenticated GitHub API hit rate limits
+  in this turn. The thread is referenced by every external SEM-in-brms
+  discussion but I have *not* read its current contents in this
+  revision. **Action for the user:** paste the issue body and the
+  maintainer's most recent comments (or the relevant excerpts) under
+  `dev-notes/refs/issue-304/` so the next pass can ground the plan in
+  Paul's stated direction. The plan below is conservative w.r.t.
+  whatever Paul has already proposed in #304 — if he has a concrete
+  syntax in mind, ours should yield to his.
+
+**What `brms3` already ships that is directly relevant:**
+
+1. **PR #1733 (`generalize-mi`, merged into `brms3`).** `mi(x, idx)`
+   now accepts **non-unique** indices, and the `NEWS.md` entry says
+   verbatim:
+   > "Extend `mi` addition terms to handle non-unique indexes via
+   > argument `idx`. This allows to express that multiple observations
+   > share the same latent missing value."
+   This is *exactly* the upstream-blessed primitive for reflective
+   measurement: a single latent value `eta_i` per person, shared
+   across that person's indicator observations, in a long-format
+   multivariate response. **The reflective desugarer in our PR-B does
+   not need to invent any latent-sharing mechanism — it desugars to
+   `mi(eta, idx = person_id)` plus `bf(eta | mi(idx = person_id) ~ 1)`
+   verbatim**, and brms3 handles the rest.
+2. **PR #1687, the new `re()` predictor.** brms3 exports a new
+   special term that lets *group-level effects defined in one part of
+   the model be used as predictors in another part*. Stan-side wiring
+   already exists (`stan_re()` + `Jsub_<id>` index data, see
+   `R/stan-predictor.R` in brms3). For our purposes:
+   - `re()` is **another viable backbone** for `=~`-style reflective
+     models — the latent value can be a group-level intercept that
+     `re()` then supplies as a predictor. We will **not** rely on
+     `re()` for PR-B (the `mi(idx)` path is more direct for single
+     latent variables) but we will document it in the vignette as the
+     idiomatic way to express *latent-variable-as-predictor* once a
+     latent has been declared.
+3. **No upstream composite (`<~`) work.** A grep over `upstream/brms3`
+   for `composite|formative|<~|FC-SEM` returns nothing. `composite()`
+   remains net-new in PR-B.
+4. **No upstream `algorithm = "optimize"`.** brms3
+   `R/backends.R` `algorithm_choices()` is unchanged
+   (`sampling/meanfield/fullrank/pathfinder/laplace/fixed_param`).
+   PR-A remains net-new.
+5. **No upstream sufficient-statistic MVN likelihood.** PR-C remains
+   net-new.
+
+**What is now redundant in our plan:**
+
+- Any plumbing for "latent value shared across multiple observations"
+  — fully covered by `mi(idx)` in brms3. Drop any language in §3.2.1
+  suggesting we add such plumbing.
+- Manual emission of `mi()` `Yl_*` predictors and the latent
+  imputation block — also handled by brms3.
+- The vague "use brms's existing latent-as-fully-missing idiom"
+  language in §3.2.1 is now specific: *"desugar `=~` to a long-format
+  multivariate `bf(...)` set that uses `mi(eta, idx = person_id)` and
+  `bf(eta | mi(idx = person_id) ~ 1)`, exactly as in the brms3 `?mi`
+  example with non-unique `idx`."*
+
+**Implications for upstream targeting and merge strategy:**
+
+- **Target `upstream/brms3`, not `upstream/master`.** The reflective
+  sugar in PR-B depends on the generalized `mi(idx)` shipped only in
+  brms3. Submitting PR-B against current master would force us to
+  back-port #1733 ourselves, which Paul will (rightly) reject.
+- **PR ordering is unchanged but rebased:** PR-A → PR-B → PR-C, all
+  branched from `upstream/brms3`.
+- **Snapshot baseline must be regenerated against brms3.** Stan code
+  emitted by brms3 differs from master in `formula-sp.R`,
+  `formula-ad.R`, `prepare_predictions.R`, and `stan-predictor.R`.
+  CP-0 below should snapshot brms3, not master.
+- **CRAN/release timing.** brms3 will ship as brms 3.0; if Paul is
+  close to releasing, our PRs land in 3.0 or 3.1. If brms3 is months
+  away, our PRs effectively delay until then. Ask on issue #304
+  before any PR is opened.
+- **Working branch.** Recommend creating a working branch *off*
+  `upstream/brms3` rather than continuing on top of `upstream/master`:
+  ```
+  git checkout -b sem-on-brms3 upstream/brms3
+  git cherry-pick <plan-commit>          # bring just the plan over
+  ```
+  All future PR-A/B/C commits land on `sem-on-brms3`. The
+  `claude/brms-composite-constructs-7hU8W` branch is preserved as the
+  planning branch.
+
+**Open question for the user:** if issue #304 contains a concrete
+syntax proposal from Paul (e.g. an `fa()` or `latent()` constructor
+he prefers), our `composite()` constructor should adopt that
+naming/shape rather than introducing a parallel one. The next plan
+revision should fold in those preferences.
+
 ---
 
 ## 1. Adversarial-collaboration team layout
@@ -115,7 +218,11 @@ bullet.
    touched only at single, additive dispatch points behind feature
    switches. Reflective measurement (`=~`) reuses the existing `mi()`
    machinery and adds **no new R class and no new Stan code**.
-2. **Backwards compatibility.** All existing brms tests pass unmodified.
+1a. **Target branch.** All PRs branch from `upstream/brms3`
+   (Version 2.99.9002), not `upstream/master`. PR-B's reflective
+   sugar depends on the generalized `mi(idx)` from PR #1733 which is
+   merged only into brms3. See §0.3.
+2. **Backwards compatibility.** All existing brms3 tests pass unmodified.
    New behaviour activates only when the user opts in
    (`composite()`, `lav("...")`, `algorithm = "optimize"`,
    `set_likelihood("mvn")`).
@@ -165,23 +272,41 @@ This is the headline feature. It must look and feel exactly like
 
 #### 3.2.1 Reflective measurement (`=~`) reuses `mi()`
 
-A reflective measurement model is, in brms's existing vocabulary, a
-**latent-as-fully-missing** variable used as a `mi()` predictor. The
-standard idiom (already supported and documented under
-`?brms::mi`) is, for `eta =~ y1 + y2 + y3`:
+A reflective measurement model is, in brms3's vocabulary, a
+**latent-as-fully-missing** variable shared across an indicator's
+observations via the new non-unique `mi(idx)` mechanism (PR #1733,
+shipped in `brms3`; see §0.3). For `eta =~ y1 + y2 + y3` over `N`
+people, the canonical desugaring is:
 
 ```r
-bf(y1 ~ 0 + mi(eta)) +
-bf(y2 ~ 0 + mi(eta)) +
-bf(y3 ~ 0 + mi(eta)) +
-bf(eta | mi() ~ 1) +              # eta is fully missing -> latent
-set_rescor(FALSE)
+# wide -> long: stack y1, y2, y3 into one column with an
+# 'indicator' factor and a 'person_id' grouping column.
+# eta is N rows long; the long-format response is 3*N rows long.
+
+bform <- bf(y_long | mi() ~ 0 + indicator +
+                              indicator:mi(eta, idx = person_id)) +
+         bf(eta    | mi(idx = person_id) ~ 1) +
+         set_rescor(FALSE)
+
+# pin first loading at 1 for identification:
+prior <- set_prior("constant(1)", coef = "indicatory1:mieta",
+                   resp = "ylong")
 ```
 
-with a `set_prior("constant(1)", coef = "mieta", resp = "y1")` to pin the
-first loading and identify the model. Therefore **the reflective
-operator requires no new R class and no new Stan code**. PR-B contributes
-only:
+Equivalent wide-form (kept as an option for users who prefer it; brms3
+also accepts this and the `idx` is implicit because each row is one
+person):
+
+```r
+bform <- bf(y1 ~ 0 + mi(eta)) +
+         bf(y2 ~ 0 + mi(eta)) +
+         bf(y3 ~ 0 + mi(eta)) +
+         bf(eta | mi() ~ 1) +
+         set_rescor(FALSE)
+```
+
+Therefore **the reflective operator requires no new R class and no new
+Stan code in brms3**. PR-B contributes only:
 
 - A small parser in `R/lav-string.R` that recognises `=~` inside
   `lav("...")` strings and emits the multi-`bf(...)` call above.
@@ -434,7 +559,16 @@ The cadence is: Implementer writes → Executor runs the **CP-N script**
 setwd("/home/user/brms")
 library(devtools)
 
-# 0a. Baseline: existing tests pass.
+# 0a. Baseline: existing tests pass on the brms3-rebased branch.
+#     Confirm the working tree is rebased onto upstream/brms3 first.
+stopifnot(grepl("brms3",
+  system("git merge-base --is-ancestor upstream/brms3 HEAD && echo OK",
+         intern = TRUE),
+  fixed = TRUE) ||
+  identical(
+    system("git rev-parse upstream/brms3", intern = TRUE),
+    system("git merge-base HEAD upstream/brms3", intern = TRUE)))
+stopifnot(packageVersion("brms") >= "2.99.9002")
 res <- devtools::test(reporter = "summary")
 stopifnot(all(as.data.frame(res)$failed == 0))
 
@@ -833,9 +967,26 @@ branch.
 
 ## 8. Concrete next action for the user
 
-1. Run **CP-0 verification** (§4 above). Paste the output back.
-2. Confirm whether `vignettes/brms_sem.Rmd` should reproduce the
+1. **Paste excerpts of issue
+   [paul-buerkner/brms#304](https://github.com/paul-buerkner/brms/issues/304)**
+   under `dev-notes/refs/issue-304/`. Both WebFetch and the GitHub API
+   were rate-limited in this turn (§0.3). At minimum we need: the
+   maintainer's most recent comment on syntax, any explicit naming
+   he prefers (`fa`, `latent`, `composite`, ...), and any "this is
+   out of scope" statements. The plan will yield to whatever Paul
+   has already proposed.
+2. **Rebase the working branch onto `upstream/brms3`:**
+   ```
+   git checkout -b sem-on-brms3 upstream/brms3
+   git cherry-pick <plan-commit-sha>
+   ```
+   Reason: PR-B requires the generalized `mi(idx)` from #1733
+   (brms3 only). See §0.3.
+3. Run **CP-0 verification** (§4 above) on the rebased branch and
+   paste the output back.
+4. Confirm whether `vignettes/brms_sem.Rmd` should reproduce the
    paper's full empirical example (American Customer Satisfaction
    Index — needs the OSF data) or only the analytic scenario (paper §
    "Scenario Analysis", self-contained).
-3. Confirm three-PR split for upstream (PR-A → PR-B → PR-C, §2 item 5).
+5. Confirm three-PR split for upstream (PR-A → PR-B → PR-C, §2 item 5),
+   all targeted at `upstream/brms3`.
