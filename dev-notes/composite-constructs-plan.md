@@ -96,21 +96,69 @@ constraint changes the picture substantially:
 This subsection rebaselines the plan against ongoing upstream work
 discovered after the first draft.
 
-**Resource access (this turn):**
+**Resource access:**
 - ✅ `upstream/brms3` and `upstream/generalize-mi` fetched locally
   (added as remote `upstream`; SHAs `4d3b308a` / `b9184f1c`).
   `brms3` is `Version: 2.99.9002` — the brms-3.0 development branch.
-- ❌ **GitHub issue
-  [paul-buerkner/brms#304](https://github.com/paul-buerkner/brms/issues/304)**
-  — both WebFetch and the unauthenticated GitHub API hit rate limits
-  in this turn. The thread is referenced by every external SEM-in-brms
-  discussion but I have *not* read its current contents in this
-  revision. **Action for the user:** paste the issue body and the
-  maintainer's most recent comments (or the relevant excerpts) under
-  `dev-notes/refs/issue-304/` so the next pass can ground the plan in
-  Paul's stated direction. The plan below is conservative w.r.t.
-  whatever Paul has already proposed in #304 — if he has a concrete
-  syntax in mind, ours should yield to his.
+- ✅ Issue
+  [paul-buerkner/brms#304](https://github.com/paul-buerkner/brms/issues/304)
+  saved to `dev-notes/refs/issue-304/` (840 lines, 54 comments
+  spanning 2017-12 through 2026-02). Paul's position has been
+  consistent and explicit; see "Paul's stated positions" below.
+
+**Paul's stated positions in #304 (load-bearing for this plan):**
+
+- *(2017-12)* "It will put brms largely on par with lavaan and mplus
+  when it comes to SEMs." → SEM is in scope.
+- *(2019-05)* On lavaan-string sugar: bwiernik suggested *"a function
+  that takes a lavaan string and returns the corresponding brms
+  syntax"*; Paul: **"yes. that's what I have in mind as well."** Our
+  bidirectional translator (§3.4) is therefore directly aligned.
+- *(2019-05)* "My plan is to support a lot of SEM models which are
+  out of scope of lavaan (or Mplus) and as such [lavaan syntax]
+  cannot be the **primary** syntax for SEMs in brms." → translator is
+  sugar, not the primary API. Matches our design.
+- *(2022-03)* **"I do not intend to use a covariance formulation for
+  latent variable models but rather a conditional formulation via
+  explicit latent variables, because I perceive the latter as more
+  flexible and easier to integrate with all the other brms features.
+  Still, for all the residual correlations, we would need copulas."**
+- *(2022-03)* "The reason I don't like the marginal parameterization
+  is that … [it] is not super easy to combine with all the other
+  features of brms that work on the mean rather than the covariance
+  (e.g. splines, GP, multilevel structure etc.) and also doesn't
+  play well necessarily with distributional regression."
+- *(2022-03)* "I am currently brainstorming in my head a bit how the
+  brms-native syntax shall look like and then we should be able to
+  add syntactical sugar on top of this, for example, a translation
+  from (some parts of) lavaan syntax."
+- *(2026-02)* **"You can use `re()` terms on the brms3 branch to use
+  random effects as predictors in other parts of the model. We will
+  have a paper on this soon. Not super convenient for all kinds of
+  SEMs but together with using `mi()` provides quite a bit of
+  flexibility even if the syntax is not yet super crisp."**
+- *(2026-02)* On a preprint of the paper: "Nope, but in a few weeks."
+  (Today is 2026-05; the paper is overdue or imminent. **The user
+  must locate and add it before any upstream PR is opened.**)
+
+**Other contributors of note:**
+
+- **ecmerkle (blavaan maintainer)** *(2022-03)*: "I would be
+  interested in helping with the lavaan-to-brms translation and could
+  provide lots of lavaan test models." → if we ship the translator,
+  he is the natural reviewer. Coordinating with him also addresses
+  the user's "replace blavaan" goal.
+- **jackobailey** *(2021-06)*: posted a working CFA-in-brms recipe
+  using `mi()` + `constant()` priors at
+  https://discourse.mc-stan.org/t/confirmatory-factor-analysis-using-brms/23139
+  with confirmed sensible output. Paul: *"The brms code you provide
+  looks reasonable to me."* This recipe is the canonical pre-brms3
+  reflective idiom — **add it to the parity harness as
+  `dev-notes/parity/models/06_jackobailey_cfa.R`**; it is the
+  reference our `mi(idx)` desugaring must match within tolerance.
+- **bwiernik** *(2021-03)*: "psychologists will want approximate fit
+  indices: RMSEA, CFI, SRMR." → out of scope for this branch but
+  belongs on the §6 "still missing for full lavaan replacement" list.
 
 **What `brms3` already ships that is directly relevant:**
 
@@ -232,18 +280,30 @@ bullet.
    (`lavaan`, `blavaan`, `MASS`) for the parity harness.
 4. **No code vendored from lavaan/blavaan.** Re-implement under brms's
    GPL-2 with credit in `NEWS.md`.
-5. **Three upstream PRs**, in this order:
+5. **Two upstream PRs + one fork-only parity tool**, in this order.
+   The original three-PR plan is retained as the *implementation*
+   ordering, but only PR-A and PR-B are now intended for upstream:
    - **PR-A: `algorithm = "optimize"`** — pure backend addition.
-   - **PR-B: `composite()` helper + `<~`/`=~` lavaan-string sugar**
-     — modelled on `mi()` / `me()` in `R/formula-sp.R`. Reflective `=~`
-     desugars into existing `mi()`-based brms idioms (no new
-     parameters); composite `<~` desugars into a new `composite()`
-     constructor that adds weight parameters and a transformed-parameter
-     latent. **No new likelihood mode required.**
-   - **PR-C: `set_likelihood("mvn")`** — optional sufficient-statistic
-     ML for `mvbf(...) + set_rescor(TRUE)` models. Required only for
-     *exact* parity with lavaan's ML fit function on FC-SEM models;
-     does not change posteriors under MCMC.
+   - **PR-B: `composite()` helper + `<~`/`=~` lavaan-string sugar +
+     bidirectional translator** — modelled on `mi()` / `me()` in
+     `R/formula-sp.R`. Reflective `=~` desugars into existing
+     `mi(idx)`-based brms3 idioms (no new parameters); composite `<~`
+     desugars into a new `composite()` constructor that adds weight
+     parameters and a transformed-parameter latent. **No new
+     likelihood mode required.** Paul confirmed in 2019-05 that he
+     wants exactly this kind of lavaan-string sugar.
+   - **PR-C: `set_likelihood("mvn")` — DOWNGRADED, fork-only.**
+     Paul (2022-03) explicitly rejected the marginal/covariance
+     formulation for upstream brms because it conflicts with brms's
+     mean-structure-centric features (splines, GPs, multilevel,
+     distributional regression). **Do not submit PR-C upstream.**
+     We still implement it on this fork because (i) it is what the
+     user asked for, and (ii) it is the only way to get exact
+     numerical parity with lavaan's ML estimator on FC-SEM models.
+     Lives in `R/likelihood-mvn.R`, gated behind `set_likelihood("mvn")`
+     so it cannot regress core brms behaviour. If the upcoming Paul
+     paper (see §0.3) embraces a marginal form for some special case,
+     re-evaluate.
 
 ---
 
@@ -967,26 +1027,49 @@ branch.
 
 ## 8. Concrete next action for the user
 
-1. **Paste excerpts of issue
-   [paul-buerkner/brms#304](https://github.com/paul-buerkner/brms/issues/304)**
-   under `dev-notes/refs/issue-304/`. Both WebFetch and the GitHub API
-   were rate-limited in this turn (§0.3). At minimum we need: the
-   maintainer's most recent comment on syntax, any explicit naming
-   he prefers (`fa`, `latent`, `composite`, ...), and any "this is
-   out of scope" statements. The plan will yield to whatever Paul
-   has already proposed.
-2. **Rebase the working branch onto `upstream/brms3`:**
+1. **Locate Paul's forthcoming paper.** As of 2026-02-20 he said it
+   would be "in a few weeks"; today is 2026-05. Options to try, in
+   order: (a) check his arXiv listing
+   `https://arxiv.org/a/buerkner_p_1.html`, (b) the Stan discourse
+   thread referenced from issue #304, (c) ping him with a
+   one-line comment on #304 asking for the preprint. Drop the PDF
+   under `dev-notes/refs/buerkner-2026-sem/` once found. The brms
+   `re()` + `mi()` syntax that the paper documents will *replace*
+   our reflective desugaring target if it differs from what we
+   currently emit.
+2. **Confirm the PR-C decision.** Paul (2022-03) rejected the
+   marginal/covariance formulation for upstream. The plan now
+   keeps `set_likelihood("mvn")` as a fork-only parity tool (§2
+   item 5). If you want to push back and try to land it upstream
+   anyway, say so and we can plan the issue comment that proposes
+   it as a strictly opt-in narrow path.
+3. **Open a comment on issue #304** before any PR is filed.
+   Suggested text (the user reviews and posts):
+   > Hi Paul, we are working on adding `composite()` and a
+   > bidirectional lavaan-string translator to brms3, modelled on
+   > `mi()` and aligned with the `re()` + `mi()` direction you
+   > described on 2026-02-20. The `composite` operator would target
+   > formative/`<~` constructs from FC-SEM (Schamberger et al.
+   > 2026, arXiv:2508.06112). We will not submit a covariance-
+   > formulation likelihood per your 2022-03 comment. Plan and CP
+   > scripts at `<our-repo-link>`. Any guidance before we start
+   > coding?
+4. **Rebase the working branch onto `upstream/brms3`:**
    ```
    git checkout -b sem-on-brms3 upstream/brms3
    git cherry-pick <plan-commit-sha>
    ```
    Reason: PR-B requires the generalized `mi(idx)` from #1733
    (brms3 only). See §0.3.
-3. Run **CP-0 verification** (§4 above) on the rebased branch and
+5. Run **CP-0 verification** (§4 above) on the rebased branch and
    paste the output back.
-4. Confirm whether `vignettes/brms_sem.Rmd` should reproduce the
+6. Confirm whether `vignettes/brms_sem.Rmd` should reproduce the
    paper's full empirical example (American Customer Satisfaction
-   Index — needs the OSF data) or only the analytic scenario (paper §
-   "Scenario Analysis", self-contained).
-5. Confirm three-PR split for upstream (PR-A → PR-B → PR-C, §2 item 5),
-   all targeted at `upstream/brms3`.
+   Index — needs the OSF data) or only the analytic scenario
+   (Schamberger et al. § "Scenario Analysis", self-contained).
+7. Add a parity benchmark from
+   https://discourse.mc-stan.org/t/confirmatory-factor-analysis-using-brms/23139
+   (jackobailey 2021) at
+   `dev-notes/parity/models/06_jackobailey_cfa.R` — Paul confirmed
+   that recipe is sensible, so our PR-B reflective sugar must
+   reproduce its results within tolerance.
